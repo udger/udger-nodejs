@@ -581,8 +581,6 @@ class UdgerParser {
                 }
             } else if (ipver === 6) {
 
-                this.ip = "2a01:7e00::f03c:91ff:fe69:b291";
-
                 ip = new Address6(this.ip);
                 let t = ip.canonicalForm().split(':');
                 let ipInts = {};
@@ -611,12 +609,12 @@ class UdgerParser {
                     ret['ip_address']['datacenter_name'] = r['name'];
                     ret['ip_address']['datacenter_name_code'] = r['name_code'];
                     ret['ip_address']['datacenter_homepage'] = r['homepage'];
-
-                    console.log('ok');
                 }
 
-                process.exit();
             }
+
+            debug("parse IP address: END, unset IP address");
+            this.ip = '';
         }
 
         return ret;
