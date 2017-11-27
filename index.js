@@ -242,8 +242,6 @@ class UdgerParser {
 
             if (os_id == 0 && client_id != 0) {
 
-                //@todo: find a valid test to pass here ?
-
                 q = this.db.prepare(
                     "SELECT os_id,family,family_code,name,name_code,homepage,icon,icon_big,vendor,vendor_code,vendor_homepage " +
                     "FROM udger_client_os_relation " +
