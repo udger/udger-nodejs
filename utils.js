@@ -1,4 +1,5 @@
 const Address6 = require('ip-address').Address6;
+const Address4 = require('ip-address').Address4;
 
 function phpRegexpToJs(str) {
     let re = str.replace(/^\//,'').trim();
