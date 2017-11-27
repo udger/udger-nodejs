@@ -29,7 +29,7 @@
   ],
   "author": "The Udger.com Team",
   "email": "info@udger.com",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/udger/udger-nodejs/issues"
   },
