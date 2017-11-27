@@ -410,8 +410,6 @@ class UdgerParser {
 
             if (r) {
 
-                console.log(r);
-
                 ret['ip_address']['ip_classification'] = r['ip_classification'] || '';
                 ret['ip_address']['ip_classification_code'] = r['ip_classification_code'] || '';
                 ret['ip_address']['ip_last_seen'] = r['ip_last_seen'] || '';
