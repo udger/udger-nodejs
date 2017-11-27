@@ -5,6 +5,7 @@ const Address4 = require('ip-address').Address4;
 const utils = require('./utils');
 
 class UdgerParser {
+
     constructor(file) {
         this.db = new Database(file, {readonly:true, fileMustExist:true});
         this.ip = null;
