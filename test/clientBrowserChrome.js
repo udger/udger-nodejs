@@ -44,7 +44,7 @@ let expected = {
 expected = config.merge(defaultResult, expected);
 
 tap.test(
-    'User Agent: IEMobile 1.1 should be recognized',
+    'User Agent: Chrome Browser should be recognized',
     (t) => {
         config.udgerParser.setUA('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36');
         let ret = config.udgerParser.parse();
