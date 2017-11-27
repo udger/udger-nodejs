@@ -1,0 +1,45 @@
+{
+  "name": "udger-nodejs",
+  "version": "0.0.0",
+  "description": "NodeJS agent string parser based on Udger https://udger.com/products/local_parser",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node node_modules/tap/bin/run.js test/*"
+  },
+  "repository": {
+    "url": "https://github.com/udger/udger-nodejs.git"
+  },
+  "keywords": [
+    "udger",
+    "user-agent",
+    "device-detector",
+    "bot-detection",
+    "mobile-detection",
+    "bot",
+    "bots",
+    "antibot",
+    "antibots",
+    "ipv4",
+    "ipv6",
+    "datacenter",
+    "crawler"
+  ],
+  "author": "The Udger.com Team",
+  "email": "info@udger.com",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/udger/udger-nodejs/issues"
+  },
+  "homepage": "https://github.com/udger/udger-nodejs#readme",
+  "devDependencies": {
+    "tap": "11.0.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "4.0.3",
+    "ip-address": "5.8.8",
+    "node-gyp": "3.6.2"
+  }
+}
