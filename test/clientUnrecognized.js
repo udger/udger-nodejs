@@ -4,10 +4,10 @@ const config = require('./lib/config');
 let defaultResult = config.defaultResult;
 
 let expected = {
-    "user_agent": {
-        "ua_string": "myUnknowUA",
-        "ua_class": "Unrecognized",
-        "ua_class_code": "unrecognized"
+    'user_agent': {
+        'ua_string': 'myUnknowUA',
+        'ua_class': 'Unrecognized',
+        'ua_class_code': 'unrecognized'
     }
 };
 
