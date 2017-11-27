@@ -1,11 +1,17 @@
 const tap = require('tap');
 const config = require('./lib/config');
 
-let expected = config.defaultResult;
-expected['user_agent']['ua_string'] = 'myUnknowUA';
-expected['user_agent']['ua_class'] = 'Unrecognized';
-expected['user_agent']['ua_class_code'] = 'unrecognized';
+let defaultResult = config.defaultResult;
 
+let expected = {
+    "user_agent": {
+        "ua_string": "myUnknowUA",
+        "ua_class": "Unrecognized",
+        "ua_class_code": "unrecognized"
+    }
+};
+
+expected = config.merge(defaultResult, expected);
 
 tap.test(
     'User Agent: myUnknowUA should return unrecognized',
