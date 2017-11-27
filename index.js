@@ -287,7 +287,6 @@ class UdgerParser {
 
                     debug("parse useragent string: device found by regex");
 
-                    //@todo: find a valid test to pass here ?
                     deviceclass_id = device['deviceclass_id'];
                     ret['user_agent']['device_class'] = device['name'] || '';
                     ret['user_agent']['device_class_code'] = device['name_code'] || '';
