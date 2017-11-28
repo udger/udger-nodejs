@@ -69,6 +69,49 @@ class UdgerParser {
         this.cacheMaxRecords = records;
     }
 
+    cacheExist() {
+        if (!this.cacheEnable) {
+            return false;
+        }
+
+        if (!this.cache[this.keyCache]) {
+            return false;
+        }
+
+        return true;
+    }
+
+    cacheRead() {
+        this.ret = this.cache[this.keyCache];
+        this.ret['from_cache'] = true;
+        return this.ret;
+    }
+
+    cacheWrite() {
+        if (!this.cacheEnable) {
+            return;
+        }
+
+        if (this.cache[this.keyCache]) {
+            // already here
+            return;
+        }
+
+        this.cache[this.keyCache] = this.ret;
+
+        debug("cache: store result of %s (length=%s)", this.keyCache);
+        debug("cache: entries count: %s/%s",(Object.keys(this.cache).length || 0), this.cacheMaxRecords);
+
+        // warning, js object is used for performance reason
+        // as opposite of php object, we can not use splice/pop stuff here
+        // so, when an entry must be remove because the cache is full, we
+        // can not determine which one will be removed
+        while (Object.keys(this.cache).length > this.cacheMaxRecords) {
+            debug("cache: removing entry",Object.keys(this.cache)[0]);
+            delete this.cache[Object.keys(this.cache)[0]];
+        }
+    }
+
     parseUa(ua) {
         if (!ua) return;
 
@@ -471,49 +514,6 @@ class UdgerParser {
         }
 
         debug("parse IP address: END");
-    }
-
-    cacheExist() {
-        if (!this.cacheEnable) {
-            return false;
-        }
-
-        if (!this.cache[this.keyCache]) {
-            return false;
-        }
-
-        return true;
-    }
-
-    cacheRead() {
-        this.ret = this.cache[this.keyCache];
-        this.ret['from_cache'] = true;
-        return this.ret;
-    }
-
-    cacheWrite() {
-        if (!this.cacheEnable) {
-            return;
-        }
-
-        if (this.cache[this.keyCache]) {
-            // already here
-            return;
-        }
-
-        this.cache[this.keyCache] = this.ret;
-
-        debug("cache: store result of %s (length=%s)", this.keyCache);
-        debug("cache: entries count: %s/%s",(Object.keys(this.cache).length || 0), this.cacheMaxRecords);
-
-        // warning, js object is used for performance reason
-        // as opposite of php object, we can not use splice/pop stuff here
-        // so, when an entry must be remove because the cache is full, we
-        // can not determine which one will be removed
-        while (Object.keys(this.cache).length > this.cacheMaxRecords) {
-            debug("cache: removing entry",Object.keys(this.cache)[0]);
-            delete this.cache[Object.keys(this.cache)[0]];
-        }
     }
 
     parse() {
