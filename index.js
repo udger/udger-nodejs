@@ -7,9 +7,13 @@ const utils = require('./utils');
 class UdgerParser {
 
     constructor(file) {
-        this.db = new Database(file, {readonly:true, fileMustExist:true});
+        this.db = new Database(file, {readonly: true, fileMustExist: true});
         this.ip = null;
         this.ua = null;
+
+        this.cacheEnable = false;
+        this.cacheMaxRecords = 4000;
+        this.cache = {};
     }
 
     setUA(ua) {
@@ -18,6 +22,14 @@ class UdgerParser {
 
     setIP(ip) {
         this.ip = ip;
+    }
+
+    setCacheEnable(cache) {
+        this.cacheEnable = cache;
+    }
+
+    setCacheSize(records) {
+        this.cacheMaxRecords = records;
     }
 
     parse() {
@@ -100,11 +112,25 @@ class UdgerParser {
                 'datacenter_name': '',
                 'datacenter_name_code': '',
                 'datacenter_homepage': ''
-            }
+            },
+            'from_cache': false
         };
 
         let q;
         let r;
+        let keyCache =  '';
+
+        // cache read handler
+        if (this.cacheEnable) {
+            if (this.ip) keyCache = this.ip;
+            if (this.ua) keyCache += this.ua;
+
+            if (this.cache[keyCache]) {
+                ret = this.cache[keyCache];
+                ret['from_cache'] = true;
+                return ret;
+            }
+        }
 
         if (this.ua) {
 
@@ -154,7 +180,7 @@ class UdgerParser {
                 ret['user_agent']['ua_family_vendor_code'] = crawler['vendor_code'] || '';
                 ret['user_agent']['ua_family_vendor_homepage'] = crawler['vendor_homepage'] || '';
                 ret['user_agent']['ua_family_icon'] = crawler['family_icon'] || '';
-                ret['user_agent']['ua_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (crawler['family'] || '')+ "#id" + (crawler['botid'] || '');
+                ret['user_agent']['ua_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (crawler['family'] || '') + "#id" + (crawler['botid'] || '');
                 ret['user_agent']['crawler_last_seen'] = crawler['last_seen'] || '';
                 ret['user_agent']['crawler_category'] = crawler['crawler_classification'] || '';
                 ret['user_agent']['crawler_category_code'] = crawler['crawler_classification_code'] || '';
@@ -262,7 +288,7 @@ class UdgerParser {
                     ret['user_agent']['os_homepage'] = cor['homepage'] || '';
                     ret['user_agent']['os_icon'] = cor['icon'] || '';
                     ret['user_agent']['os_icon_big'] = cor['icon_big'] || '';
-                    ret['user_agent']['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os="+(cor['name'] || '');
+                    ret['user_agent']['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (cor['name'] || '');
                     ret['user_agent']['os_family'] = cor['family'] || '';
                     ret['user_agent']['os_family_code'] = cor['family_code'] || '';
                     ret['user_agent']['os_family_vendor'] = cor['vendor'] || '';
@@ -276,9 +302,9 @@ class UdgerParser {
             ////////////////////////////////////////////////
 
             q = this.db.prepare(
-                "SELECT deviceclass_id,regstring,name,name_code,icon,icon_big "+
-                "FROM udger_deviceclass_regex "+
-                "JOIN udger_deviceclass_list ON udger_deviceclass_list.id=udger_deviceclass_regex.deviceclass_id "+
+                "SELECT deviceclass_id,regstring,name,name_code,icon,icon_big " +
+                "FROM udger_deviceclass_regex " +
+                "JOIN udger_deviceclass_list ON udger_deviceclass_list.id=udger_deviceclass_regex.deviceclass_id " +
                 "ORDER BY sequence ASC"
             );
 
@@ -300,9 +326,9 @@ class UdgerParser {
 
             if (deviceclass_id == 0 && client_class_id != -1) {
                 q = this.db.prepare(
-                    "SELECT deviceclass_id,name,name_code,icon,icon_big "+
-                    "FROM udger_deviceclass_list "+
-                    "JOIN udger_client_class ON udger_client_class.deviceclass_id=udger_deviceclass_list.id "+
+                    "SELECT deviceclass_id,name,name_code,icon,icon_big " +
+                    "FROM udger_deviceclass_list " +
+                    "JOIN udger_client_class ON udger_client_class.deviceclass_id=udger_deviceclass_list.id " +
                     "WHERE udger_client_class.id=?"
                 );
 
@@ -328,9 +354,9 @@ class UdgerParser {
             if (ret['user_agent']['os_family_code']) {
                 q = this.db.prepare(
                     "SELECT id,regstring FROM udger_devicename_regex " +
-                    "WHERE ("+
-                        "(os_family_code=? AND os_code='-all-') OR "+
-                        "(os_family_code=? AND os_code=?)" +
+                    "WHERE (" +
+                    "(os_family_code=? AND os_code='-all-') OR " +
+                    "(os_family_code=? AND os_code=?)" +
                     ") " +
                     "ORDER BY sequence"
                 );
@@ -377,6 +403,7 @@ class UdgerParser {
 
             debug("parse useragent string: END, unset useragent string");
             this.ua = '';
+
         }
 
         if (this.ip) {
@@ -463,6 +490,7 @@ class UdgerParser {
                     ret['ip_address']['datacenter_name_code'] = r['name_code'] || '';
                     ret['ip_address']['datacenter_homepage'] = r['homepage'] || '';
                 }
+
             } else if (ipver === 6) {
 
                 ip = new Address6(this.ip);
@@ -499,6 +527,24 @@ class UdgerParser {
 
             debug("parse IP address: END, unset IP address");
             this.ip = '';
+        }
+
+        if (this.cacheEnable && !this.cache[keyCache]) {
+
+            this.cache[keyCache] = ret;
+
+            debug("cache: store result of %s (length=%s)", keyCache);
+            debug("cache: entries count: %s/%s",(Object.keys(this.cache).length || 0), this.cacheMaxRecords);
+
+            // warning, js object is used for performance reason
+            // as opposite of php object, we can not use splice/pop stuff here
+            // so, when an entry must be remove because the cache is full, we
+            // can not determine which one will be removed
+            while (Object.keys(this.cache).length > this.cacheMaxRecords) {
+                debug("cache: removing entry",Object.keys(this.cache)[0]);
+                delete this.cache[Object.keys(this.cache)[0]];
+            }
+
         }
 
         return ret;

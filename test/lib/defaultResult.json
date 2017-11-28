@@ -73,5 +73,6 @@
     "datacenter_name": "",
     "datacenter_name_code": "",
     "datacenter_homepage": ""
-  }
+  },
+  "from_cache":false
 }
