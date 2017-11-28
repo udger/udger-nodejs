@@ -140,6 +140,11 @@ class UdgerParser {
             'from_cache': false
         };
 
+        let client_id = 0;
+        let client_class_id = -1;
+        let os_id = 0;
+        let deviceclass_id = 0;
+
         let q;
         let r;
         let keyCache =  '';
@@ -159,11 +164,6 @@ class UdgerParser {
         if (this.ua) {
 
             debug("parse useragent string: START (useragent: " + this.ua + ")");
-
-            let client_id = 0;
-            let client_class_id = -1;
-            let os_id = 0;
-            let deviceclass_id = 0;
 
             ret['user_agent']['ua_string'] = this.ua;
             ret['user_agent']['ua_class'] = 'Unrecognized';
@@ -185,30 +185,30 @@ class UdgerParser {
                 "WHERE ua_string=?"
             );
 
-            let crawler = q.get(this.ua);
+            r = q.get(this.ua);
 
-            if (crawler) {
+            if (r) {
 
                 debug("parse useragent string: crawler found");
 
                 client_class_id = 99;
                 ret['user_agent']['ua_class'] = 'Crawler';
                 ret['user_agent']['ua_class_code'] = 'crawler';
-                ret['user_agent']['ua'] = crawler['name'] || '';
-                ret['user_agent']['ua_version'] = crawler['ver'] || '';
-                ret['user_agent']['ua_version_major'] = crawler['ver_major'] || '';
-                ret['user_agent']['ua_family'] = crawler['family'] || '';
-                ret['user_agent']['ua_family_code'] = crawler['family_code'] || '';
-                ret['user_agent']['ua_family_homepage'] = crawler['family_homepage'] || '';
-                ret['user_agent']['ua_family_vendor'] = crawler['vendor'] || '';
-                ret['user_agent']['ua_family_vendor_code'] = crawler['vendor_code'] || '';
-                ret['user_agent']['ua_family_vendor_homepage'] = crawler['vendor_homepage'] || '';
-                ret['user_agent']['ua_family_icon'] = crawler['family_icon'] || '';
-                ret['user_agent']['ua_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (crawler['family'] || '') + "#id" + (crawler['botid'] || '');
-                ret['user_agent']['crawler_last_seen'] = crawler['last_seen'] || '';
-                ret['user_agent']['crawler_category'] = crawler['crawler_classification'] || '';
-                ret['user_agent']['crawler_category_code'] = crawler['crawler_classification_code'] || '';
-                ret['user_agent']['crawler_respect_robotstxt'] = crawler['respect_robotstxt'] || '';
+                ret['user_agent']['ua'] = r['name'] || '';
+                ret['user_agent']['ua_version'] = r['ver'] || '';
+                ret['user_agent']['ua_version_major'] = r['ver_major'] || '';
+                ret['user_agent']['ua_family'] = r['family'] || '';
+                ret['user_agent']['ua_family_code'] = r['family_code'] || '';
+                ret['user_agent']['ua_family_homepage'] = r['family_homepage'] || '';
+                ret['user_agent']['ua_family_vendor'] = r['vendor'] || '';
+                ret['user_agent']['ua_family_vendor_code'] = r['vendor_code'] || '';
+                ret['user_agent']['ua_family_vendor_homepage'] = r['vendor_homepage'] || '';
+                ret['user_agent']['ua_family_icon'] = r['family_icon'] || '';
+                ret['user_agent']['ua_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (r['family'] || '') + "#id" + (r['botid'] || '');
+                ret['user_agent']['crawler_last_seen'] = r['last_seen'] || '';
+                ret['user_agent']['crawler_category'] = r['crawler_classification'] || '';
+                ret['user_agent']['crawler_category_code'] = r['crawler_classification_code'] || '';
+                ret['user_agent']['crawler_respect_robotstxt'] = r['respect_robotstxt'] || '';
 
             } else {
 
@@ -220,36 +220,36 @@ class UdgerParser {
                     "ORDER BY sequence ASC"
                 );
 
-                for (let client of q.iterate()) {
-                    e = this.ua.match(utils.phpRegexpToJs(client['regstring']));
+                for (r of q.iterate()) {
+                    e = this.ua.match(utils.phpRegexpToJs(r['regstring']));
                     if (e) {
 
                         debug("parse useragent string: client found");
 
-                        client_id = client['client_id'];
-                        client_class_id = client['class_id'];
-                        ret['user_agent']['ua_class'] = client['client_classification'];
-                        ret['user_agent']['ua_class_code'] = client['client_classification_code'];
+                        client_id = r['client_id'];
+                        client_class_id = r['class_id'];
+                        ret['user_agent']['ua_class'] = r['client_classification'];
+                        ret['user_agent']['ua_class_code'] = r['client_classification_code'];
                         if (e[1]) {
-                            ret['user_agent']['ua'] = client['name'] + " " + e[1];
+                            ret['user_agent']['ua'] = r['name'] + " " + e[1];
                             ret['user_agent']['ua_version'] = e[1];
                             ret['user_agent']['ua_version_major'] = e[1].split('.')[0];
                         } else {
-                            ret['user_agent']['ua'] = client['name'];
+                            ret['user_agent']['ua'] = r['name'];
                             ret['user_agent']['ua_version'] = '';
                             ret['user_agent']['ua_version_major'] = '';
                         }
-                        ret['user_agent']['ua_uptodate_current_version'] = client['uptodate_current_version'] || '';
-                        ret['user_agent']['ua_family'] = client['name'] || '';
-                        ret['user_agent']['ua_family_code'] = client['name_code'] || '';
-                        ret['user_agent']['ua_family_homepage'] = client['homepage'] || '';
-                        ret['user_agent']['ua_family_vendor'] = client['vendor'] || '';
-                        ret['user_agent']['ua_family_vendor_code'] = client['vendor_code'] || '';
-                        ret['user_agent']['ua_family_vendor_homepage'] = client['vendor_homepage'] || '';
-                        ret['user_agent']['ua_family_icon'] = client['icon'] || '';
-                        ret['user_agent']['ua_family_icon_big'] = client['icon_big'] || '';
-                        ret['user_agent']['ua_family_info_url'] = "https://udger.com/resources/ua-list/browser-detail?browser=" + (client['name'] || '');
-                        ret['user_agent']['ua_engine'] = client['engine'] || '';
+                        ret['user_agent']['ua_uptodate_current_version'] = r['uptodate_current_version'] || '';
+                        ret['user_agent']['ua_family'] = r['name'] || '';
+                        ret['user_agent']['ua_family_code'] = r['name_code'] || '';
+                        ret['user_agent']['ua_family_homepage'] = r['homepage'] || '';
+                        ret['user_agent']['ua_family_vendor'] = r['vendor'] || '';
+                        ret['user_agent']['ua_family_vendor_code'] = r['vendor_code'] || '';
+                        ret['user_agent']['ua_family_vendor_homepage'] = r['vendor_homepage'] || '';
+                        ret['user_agent']['ua_family_icon'] = r['icon'] || '';
+                        ret['user_agent']['ua_family_icon_big'] = r['icon_big'] || '';
+                        ret['user_agent']['ua_family_info_url'] = "https://udger.com/resources/ua-list/browser-detail?browser=" + (r['name'] || '');
+                        ret['user_agent']['ua_engine'] = r['engine'] || '';
                         break;
                     }
                 }
@@ -265,24 +265,24 @@ class UdgerParser {
                 "ORDER BY sequence ASC"
             );
 
-            for (let os of q.iterate()) {
-                e = this.ua.match(utils.phpRegexpToJs(os['regstring']));
+            for (r of q.iterate()) {
+                e = this.ua.match(utils.phpRegexpToJs(r['regstring']));
                 if (e) {
 
                     debug("parse useragent string: os found");
 
-                    os_id = os['os_id'];
-                    ret['user_agent']['os'] = os['name'] || '';
-                    ret['user_agent']['os_code'] = os['name_code'] || '';
-                    ret['user_agent']['os_homepage'] = os['homepage'] || '';
-                    ret['user_agent']['os_icon'] = os['icon'] || '';
-                    ret['user_agent']['os_icon_big'] = os['icon_big'] || '';
-                    ret['user_agent']['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (os['name'] || '');
-                    ret['user_agent']['os_family'] = os['family'] || '';
-                    ret['user_agent']['os_family_code'] = os['family_code'] || '';
-                    ret['user_agent']['os_family_vendor'] = os['vendor'] || '';
-                    ret['user_agent']['os_family_vendor_code'] = os['vendor_code'] || '';
-                    ret['user_agent']['os_family_vendor_homepage'] = os['vendor_homepage'] || '';
+                    os_id = r['os_id'];
+                    ret['user_agent']['os'] = r['name'] || '';
+                    ret['user_agent']['os_code'] = r['name_code'] || '';
+                    ret['user_agent']['os_homepage'] = r['homepage'] || '';
+                    ret['user_agent']['os_icon'] = r['icon'] || '';
+                    ret['user_agent']['os_icon_big'] = r['icon_big'] || '';
+                    ret['user_agent']['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (r['name'] || '');
+                    ret['user_agent']['os_family'] = r['family'] || '';
+                    ret['user_agent']['os_family_code'] = r['family_code'] || '';
+                    ret['user_agent']['os_family_vendor'] = r['vendor'] || '';
+                    ret['user_agent']['os_family_vendor_code'] = r['vendor_code'] || '';
+                    ret['user_agent']['os_family_vendor_homepage'] = r['vendor_homepage'] || '';
                     break;
                 }
             }
@@ -300,24 +300,24 @@ class UdgerParser {
                     "WHERE client_id=?"
                 );
 
-                let cor = q.get(client_id);
+                r = q.get(client_id);
 
-                if (cor) {
+                if (r) {
 
                     debug("parse useragent string: client os relation found");
 
-                    os_id = cor['os_id'];
-                    ret['user_agent']['os'] = cor['name'] || '';
-                    ret['user_agent']['os_code'] = cor['name_code'] || '';
-                    ret['user_agent']['os_homepage'] = cor['homepage'] || '';
-                    ret['user_agent']['os_icon'] = cor['icon'] || '';
-                    ret['user_agent']['os_icon_big'] = cor['icon_big'] || '';
-                    ret['user_agent']['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (cor['name'] || '');
-                    ret['user_agent']['os_family'] = cor['family'] || '';
-                    ret['user_agent']['os_family_code'] = cor['family_code'] || '';
-                    ret['user_agent']['os_family_vendor'] = cor['vendor'] || '';
-                    ret['user_agent']['os_family_vendor_code'] = cor['vendor_code'] || '';
-                    ret['user_agent']['os_family_vendor_homepage'] = cor['vendor_homepage'] || '';
+                    os_id = r['os_id'];
+                    ret['user_agent']['os'] = r['name'] || '';
+                    ret['user_agent']['os_code'] = r['name_code'] || '';
+                    ret['user_agent']['os_homepage'] = r['homepage'] || '';
+                    ret['user_agent']['os_icon'] = r['icon'] || '';
+                    ret['user_agent']['os_icon_big'] = r['icon_big'] || '';
+                    ret['user_agent']['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (r['name'] || '');
+                    ret['user_agent']['os_family'] = r['family'] || '';
+                    ret['user_agent']['os_family_code'] = r['family_code'] || '';
+                    ret['user_agent']['os_family_vendor'] = r['vendor'] || '';
+                    ret['user_agent']['os_family_vendor_code'] = r['vendor_code'] || '';
+                    ret['user_agent']['os_family_vendor_homepage'] = r['vendor_homepage'] || '';
                 }
             }
 
@@ -332,18 +332,18 @@ class UdgerParser {
                 "ORDER BY sequence ASC"
             );
 
-            for (let device of q.iterate()) {
-                e = this.ua.match(utils.phpRegexpToJs(device['regstring']));
+            for (r of q.iterate()) {
+                e = this.ua.match(utils.phpRegexpToJs(r['regstring']));
                 if (e) {
 
                     debug("parse useragent string: device found by regex");
 
-                    deviceclass_id = device['deviceclass_id'];
-                    ret['user_agent']['device_class'] = device['name'] || '';
-                    ret['user_agent']['device_class_code'] = device['name_code'] || '';
-                    ret['user_agent']['device_class_icon'] = device['icon'] || '';
-                    ret['user_agent']['device_class_icon_big'] = device['icon_big'] || '';
-                    ret['user_agent']['device_class_info_url'] = "https://udger.com/resources/ua-list/device-detail?device=" + device['name'];
+                    deviceclass_id = r['deviceclass_id'];
+                    ret['user_agent']['device_class'] = r['name'] || '';
+                    ret['user_agent']['device_class_code'] = r['name_code'] || '';
+                    ret['user_agent']['device_class_icon'] = r['icon'] || '';
+                    ret['user_agent']['device_class_icon_big'] = r['icon_big'] || '';
+                    ret['user_agent']['device_class_info_url'] = "https://udger.com/resources/ua-list/device-detail?device=" + r['name'];
                     break;
                 }
             }
@@ -356,7 +356,7 @@ class UdgerParser {
                     "WHERE udger_client_class.id=?"
                 );
 
-                let r = q.get(client_class_id);
+                r = q.get(client_class_id);
 
                 if (r) {
 
@@ -426,16 +426,20 @@ class UdgerParser {
             }
 
             debug("parse useragent string: END, unset useragent string");
-            this.ua = '';
 
         }
 
         if (this.ip) {
+
+            let ipInt;
+            let ip;
+            let ipver;
+
             debug("parse IP address: START (IP: " + this.ip + ")");
 
             ret['ip_address']['ip'] = this.ip;
 
-            let ipver = utils.getIpVersion(this.ip);
+            ipver = utils.getIpVersion(this.ip);
 
             if (ipver === 4 || ipver === 6) {
                 if (ipver === 6) {
@@ -491,9 +495,6 @@ class UdgerParser {
                 ret['ip_address']['ip_classification'] = 'Unrecognized';
                 ret['ip_address']['ip_classification_code'] = 'unrecognized';
             }
-
-            let ipInt;
-            let ip;
 
             if (ipver === 4) {
 
