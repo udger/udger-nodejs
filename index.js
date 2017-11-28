@@ -191,7 +191,7 @@ class UdgerParser {
 
                 debug("parse useragent string: crawler found");
 
-                let client_class_id = 99;
+                client_class_id = 99;
                 ret['user_agent']['ua_class'] = 'Crawler';
                 ret['user_agent']['ua_class_code'] = 'crawler';
                 ret['user_agent']['ua'] = crawler['name'] || '';
