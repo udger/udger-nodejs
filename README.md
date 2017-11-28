@@ -129,11 +129,8 @@ Output
 ```
 
 
-### Cache
-
-By default, cache is disable.
-
-To enable cache, just add this line BEFORE using udgerParser.set():
+### LRU Cache
+By default, cache is disable. To enable cache, just add this line BEFORE using udgerParser.set():
 
     // by default, cache size is 4000 keys (a key can be an UA, or UA+IP)
     // you can modify this limit
@@ -146,14 +143,18 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
 ### Running tests
     npm test
 
+
 ### Automatic updates download
 - for autoupdate data use Udger data updater (https://udger.com/support/documentation/?doc=62)
+
 
 ### Documentation for programmers
 - https://udger.com/pub/documentation/parser/NodeJS/html/
 
+
 ### Author
 - The Udger.com Team (info@udger.com)
+
 
 ### old v2 format
 This module does not support v2 format
