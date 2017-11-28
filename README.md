@@ -27,22 +27,22 @@ Datacenter name .. etc.)
     npm install udger-nodejs
 
 ### Usage
-You should review the included examples (`parse.php`, `account.php`)
+You should review the included examples in `examples/` directory
 
 Here's a quick example:
 
 ```js
 const udgerParser = require('udger-nodejs')('./udgerdb_v3.dat');
 
-let myUa = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36';
-let myIp = '2A02:598:7000:116:0:0:0:101';
-
 udgerParser.set({
-    ua:myUa,
-    ip:myIp
+    ua:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
+    ip:'2A02:598:7000:116:0:0:0:101'
 });
+
 let ret = udgerParser.parse();
-console.log(JSON.stringify(ret,null,4));
+
+// beautify json output with 4 spaces indent
+console.log(JSON.stringify(ret, null, 4));
 ```
 
 Output
