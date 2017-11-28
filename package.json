@@ -1,6 +1,6 @@
 {
   "name": "udger-nodejs",
-  "version": "0.0.0",
+  "version": "0.9.0",
   "description": "NodeJS agent string parser based on Udger https://udger.com/products/local_parser",
   "main": "index.js",
   "directories": {
