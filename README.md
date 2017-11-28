@@ -129,6 +129,19 @@ Output
 ```
 
 
+### Cache
+
+By default, cache is disable.
+
+To enable cache, just add this line BEFORE using udgerParser.set():
+
+    // by default, cache size is 4000 keys (a key can be an UA, or UA+IP)
+    // you can modify this limit
+    udgerParser.setCacheSize(1000);
+    udgerParser.setCacheEnable()
+
+When a record is coming from the cache, the "from_cache" attribute in the response is "true"
+
 
 ### Running tests
     npm test
