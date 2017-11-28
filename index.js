@@ -17,7 +17,6 @@ class UdgerParser {
         this.cache = {};
 
         this.defaultRet = fs.readJsonSync('./defaultResult.json');
-
     }
 
     /**
@@ -64,16 +63,24 @@ class UdgerParser {
 
     parse() {
 
+        // used for matching ua with regexp
+        let e;
+
+        // used for sqlite3 prepare statement
+        let q;
+
+        // used for sqlite3 result
+        let r;
+
+        // used as the key cache
+        let keyCache =  '';
+
+
         let client_id = 0;
         let client_class_id = -1;
         let os_id = 0;
         let deviceclass_id = 0;
-
-        let e;
-        let q;
-        let r;
-        let keyCache =  '';
-
+        
         // cache read handler
         if (this.cacheEnable) {
             if (this.ip) keyCache = this.ip;
@@ -85,14 +92,17 @@ class UdgerParser {
                 return this.ret;
             }
         }
+        
+        let rua = this.ret['user_agent'];
+        let rip = this.ret['ip_address'];
 
         if (this.ua) {
 
             debug("parse useragent string: START (useragent: " + this.ua + ")");
 
-            this.ret['user_agent']['ua_string'] = this.ua;
-            this.ret['user_agent']['ua_class'] = 'Unrecognized';
-            this.ret['user_agent']['ua_class_code'] = 'unrecognized';
+            rua['ua_string'] = this.ua;
+            rua['ua_class'] = 'Unrecognized';
+            rua['ua_class_code'] = 'unrecognized';
 
             ////////////////////////////////////////////////
             // search for crawlers
@@ -117,23 +127,23 @@ class UdgerParser {
                 debug("parse useragent string: crawler found");
 
                 client_class_id = 99;
-                this.ret['user_agent']['ua_class'] = 'Crawler';
-                this.ret['user_agent']['ua_class_code'] = 'crawler';
-                this.ret['user_agent']['ua'] = r['name'] || '';
-                this.ret['user_agent']['ua_version'] = r['ver'] || '';
-                this.ret['user_agent']['ua_version_major'] = r['ver_major'] || '';
-                this.ret['user_agent']['ua_family'] = r['family'] || '';
-                this.ret['user_agent']['ua_family_code'] = r['family_code'] || '';
-                this.ret['user_agent']['ua_family_homepage'] = r['family_homepage'] || '';
-                this.ret['user_agent']['ua_family_vendor'] = r['vendor'] || '';
-                this.ret['user_agent']['ua_family_vendor_code'] = r['vendor_code'] || '';
-                this.ret['user_agent']['ua_family_vendor_homepage'] = r['vendor_homepage'] || '';
-                this.ret['user_agent']['ua_family_icon'] = r['family_icon'] || '';
-                this.ret['user_agent']['ua_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (r['family'] || '') + "#id" + (r['botid'] || '');
-                this.ret['user_agent']['crawler_last_seen'] = r['last_seen'] || '';
-                this.ret['user_agent']['crawler_category'] = r['crawler_classification'] || '';
-                this.ret['user_agent']['crawler_category_code'] = r['crawler_classification_code'] || '';
-                this.ret['user_agent']['crawler_respect_robotstxt'] = r['respect_robotstxt'] || '';
+                rua['ua_class'] = 'Crawler';
+                rua['ua_class_code'] = 'crawler';
+                rua['ua'] = r['name'] || '';
+                rua['ua_version'] = r['ver'] || '';
+                rua['ua_version_major'] = r['ver_major'] || '';
+                rua['ua_family'] = r['family'] || '';
+                rua['ua_family_code'] = r['family_code'] || '';
+                rua['ua_family_homepage'] = r['family_homepage'] || '';
+                rua['ua_family_vendor'] = r['vendor'] || '';
+                rua['ua_family_vendor_code'] = r['vendor_code'] || '';
+                rua['ua_family_vendor_homepage'] = r['vendor_homepage'] || '';
+                rua['ua_family_icon'] = r['family_icon'] || '';
+                rua['ua_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (r['family'] || '') + "#id" + (r['botid'] || '');
+                rua['crawler_last_seen'] = r['last_seen'] || '';
+                rua['crawler_category'] = r['crawler_classification'] || '';
+                rua['crawler_category_code'] = r['crawler_classification_code'] || '';
+                rua['crawler_respect_robotstxt'] = r['respect_robotstxt'] || '';
 
             } else {
 
@@ -153,28 +163,28 @@ class UdgerParser {
 
                         client_id = r['client_id'];
                         client_class_id = r['class_id'];
-                        this.ret['user_agent']['ua_class'] = r['client_classification'];
-                        this.ret['user_agent']['ua_class_code'] = r['client_classification_code'];
+                        rua['ua_class'] = r['client_classification'];
+                        rua['ua_class_code'] = r['client_classification_code'];
                         if (e[1]) {
-                            this.ret['user_agent']['ua'] = r['name'] + " " + e[1];
-                            this.ret['user_agent']['ua_version'] = e[1];
-                            this.ret['user_agent']['ua_version_major'] = e[1].split('.')[0];
+                            rua['ua'] = r['name'] + " " + e[1];
+                            rua['ua_version'] = e[1];
+                            rua['ua_version_major'] = e[1].split('.')[0];
                         } else {
-                            this.ret['user_agent']['ua'] = r['name'];
-                            this.ret['user_agent']['ua_version'] = '';
-                            this.ret['user_agent']['ua_version_major'] = '';
+                            rua['ua'] = r['name'];
+                            rua['ua_version'] = '';
+                            rua['ua_version_major'] = '';
                         }
-                        this.ret['user_agent']['ua_uptodate_current_version'] = r['uptodate_current_version'] || '';
-                        this.ret['user_agent']['ua_family'] = r['name'] || '';
-                        this.ret['user_agent']['ua_family_code'] = r['name_code'] || '';
-                        this.ret['user_agent']['ua_family_homepage'] = r['homepage'] || '';
-                        this.ret['user_agent']['ua_family_vendor'] = r['vendor'] || '';
-                        this.ret['user_agent']['ua_family_vendor_code'] = r['vendor_code'] || '';
-                        this.ret['user_agent']['ua_family_vendor_homepage'] = r['vendor_homepage'] || '';
-                        this.ret['user_agent']['ua_family_icon'] = r['icon'] || '';
-                        this.ret['user_agent']['ua_family_icon_big'] = r['icon_big'] || '';
-                        this.ret['user_agent']['ua_family_info_url'] = "https://udger.com/resources/ua-list/browser-detail?browser=" + (r['name'] || '');
-                        this.ret['user_agent']['ua_engine'] = r['engine'] || '';
+                        rua['ua_uptodate_current_version'] = r['uptodate_current_version'] || '';
+                        rua['ua_family'] = r['name'] || '';
+                        rua['ua_family_code'] = r['name_code'] || '';
+                        rua['ua_family_homepage'] = r['homepage'] || '';
+                        rua['ua_family_vendor'] = r['vendor'] || '';
+                        rua['ua_family_vendor_code'] = r['vendor_code'] || '';
+                        rua['ua_family_vendor_homepage'] = r['vendor_homepage'] || '';
+                        rua['ua_family_icon'] = r['icon'] || '';
+                        rua['ua_family_icon_big'] = r['icon_big'] || '';
+                        rua['ua_family_info_url'] = "https://udger.com/resources/ua-list/browser-detail?browser=" + (r['name'] || '');
+                        rua['ua_engine'] = r['engine'] || '';
                         break;
                     }
                 }
@@ -197,17 +207,17 @@ class UdgerParser {
                     debug("parse useragent string: os found");
 
                     os_id = r['os_id'];
-                    this.ret['user_agent']['os'] = r['name'] || '';
-                    this.ret['user_agent']['os_code'] = r['name_code'] || '';
-                    this.ret['user_agent']['os_homepage'] = r['homepage'] || '';
-                    this.ret['user_agent']['os_icon'] = r['icon'] || '';
-                    this.ret['user_agent']['os_icon_big'] = r['icon_big'] || '';
-                    this.ret['user_agent']['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (r['name'] || '');
-                    this.ret['user_agent']['os_family'] = r['family'] || '';
-                    this.ret['user_agent']['os_family_code'] = r['family_code'] || '';
-                    this.ret['user_agent']['os_family_vendor'] = r['vendor'] || '';
-                    this.ret['user_agent']['os_family_vendor_code'] = r['vendor_code'] || '';
-                    this.ret['user_agent']['os_family_vendor_homepage'] = r['vendor_homepage'] || '';
+                    rua['os'] = r['name'] || '';
+                    rua['os_code'] = r['name_code'] || '';
+                    rua['os_homepage'] = r['homepage'] || '';
+                    rua['os_icon'] = r['icon'] || '';
+                    rua['os_icon_big'] = r['icon_big'] || '';
+                    rua['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (r['name'] || '');
+                    rua['os_family'] = r['family'] || '';
+                    rua['os_family_code'] = r['family_code'] || '';
+                    rua['os_family_vendor'] = r['vendor'] || '';
+                    rua['os_family_vendor_code'] = r['vendor_code'] || '';
+                    rua['os_family_vendor_homepage'] = r['vendor_homepage'] || '';
                     break;
                 }
             }
@@ -232,17 +242,17 @@ class UdgerParser {
                     debug("parse useragent string: client os relation found");
 
                     os_id = r['os_id'];
-                    this.ret['user_agent']['os'] = r['name'] || '';
-                    this.ret['user_agent']['os_code'] = r['name_code'] || '';
-                    this.ret['user_agent']['os_homepage'] = r['homepage'] || '';
-                    this.ret['user_agent']['os_icon'] = r['icon'] || '';
-                    this.ret['user_agent']['os_icon_big'] = r['icon_big'] || '';
-                    this.ret['user_agent']['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (r['name'] || '');
-                    this.ret['user_agent']['os_family'] = r['family'] || '';
-                    this.ret['user_agent']['os_family_code'] = r['family_code'] || '';
-                    this.ret['user_agent']['os_family_vendor'] = r['vendor'] || '';
-                    this.ret['user_agent']['os_family_vendor_code'] = r['vendor_code'] || '';
-                    this.ret['user_agent']['os_family_vendor_homepage'] = r['vendor_homepage'] || '';
+                    rua['os'] = r['name'] || '';
+                    rua['os_code'] = r['name_code'] || '';
+                    rua['os_homepage'] = r['homepage'] || '';
+                    rua['os_icon'] = r['icon'] || '';
+                    rua['os_icon_big'] = r['icon_big'] || '';
+                    rua['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (r['name'] || '');
+                    rua['os_family'] = r['family'] || '';
+                    rua['os_family_code'] = r['family_code'] || '';
+                    rua['os_family_vendor'] = r['vendor'] || '';
+                    rua['os_family_vendor_code'] = r['vendor_code'] || '';
+                    rua['os_family_vendor_homepage'] = r['vendor_homepage'] || '';
                 }
             }
 
@@ -264,11 +274,11 @@ class UdgerParser {
                     debug("parse useragent string: device found by regex");
 
                     deviceclass_id = r['deviceclass_id'];
-                    this.ret['user_agent']['device_class'] = r['name'] || '';
-                    this.ret['user_agent']['device_class_code'] = r['name_code'] || '';
-                    this.ret['user_agent']['device_class_icon'] = r['icon'] || '';
-                    this.ret['user_agent']['device_class_icon_big'] = r['icon_big'] || '';
-                    this.ret['user_agent']['device_class_info_url'] = "https://udger.com/resources/ua-list/device-detail?device=" + r['name'];
+                    rua['device_class'] = r['name'] || '';
+                    rua['device_class_code'] = r['name_code'] || '';
+                    rua['device_class_icon'] = r['icon'] || '';
+                    rua['device_class_icon_big'] = r['icon_big'] || '';
+                    rua['device_class_info_url'] = "https://udger.com/resources/ua-list/device-detail?device=" + r['name'];
                     break;
                 }
             }
@@ -288,11 +298,11 @@ class UdgerParser {
                     debug("parse useragent string: device found by deviceclass");
 
                     deviceclass_id = r['deviceclass_id'];
-                    this.ret['user_agent']['device_class'] = r['name'] || '';
-                    this.ret['user_agent']['device_class_code'] = r['name_code'] || '';
-                    this.ret['user_agent']['device_class_icon'] = r['icon'] || '';
-                    this.ret['user_agent']['device_class_icon_big'] = r['icon_big'] || '';
-                    this.ret['user_agent']['device_class_info_url'] = "https://udger.com/resources/ua-list/device-detail?device=" + (r['name'] || '');
+                    rua['device_class'] = r['name'] || '';
+                    rua['device_class_code'] = r['name_code'] || '';
+                    rua['device_class_icon'] = r['icon'] || '';
+                    rua['device_class_icon_big'] = r['icon_big'] || '';
+                    rua['device_class_info_url'] = "https://udger.com/resources/ua-list/device-detail?device=" + (r['name'] || '');
                 }
             }
 
@@ -300,7 +310,7 @@ class UdgerParser {
             // device marketname
             ////////////////////////////////////////////////
 
-            if (this.ret['user_agent']['os_family_code']) {
+            if (rua['os_family_code']) {
                 q = this.db.prepare(
                     "SELECT id,regstring FROM udger_devicename_regex " +
                     "WHERE (" +
@@ -311,9 +321,9 @@ class UdgerParser {
                 );
 
                 let bindParams = [
-                    this.ret['user_agent']['os_family_code'],
-                    this.ret['user_agent']['os_family_code'],
-                    this.ret['user_agent']['os_code']
+                    rua['os_family_code'],
+                    rua['os_family_code'],
+                    rua['os_code']
                 ];
 
                 let match;
@@ -340,13 +350,13 @@ class UdgerParser {
 
                     debug("parse useragent string: device marketname found");
 
-                    this.ret['user_agent']['device_marketname'] = rC['marketname'] || '';
-                    this.ret['user_agent']['device_brand'] = rC['brand'] || '';
-                    this.ret['user_agent']['device_brand_code'] = rC['brand_code'] || '';
-                    this.ret['user_agent']['device_brand_homepage'] = rC['brand_url'] || '';
-                    this.ret['user_agent']['device_brand_icon'] = rC['icon'] || '';
-                    this.ret['user_agent']['device_brand_icon_big'] = rC['icon_big'] || '';
-                    this.ret['user_agent']['device_brand_info_url'] = "https://udger.com/resources/ua-list/devices-brand-detail?brand=" + (rC['brand_code'] || '');
+                    rua['device_marketname'] = rC['marketname'] || '';
+                    rua['device_brand'] = rC['brand'] || '';
+                    rua['device_brand_code'] = rC['brand_code'] || '';
+                    rua['device_brand_homepage'] = rC['brand_url'] || '';
+                    rua['device_brand_icon'] = rC['icon'] || '';
+                    rua['device_brand_icon_big'] = rC['icon_big'] || '';
+                    rua['device_brand_info_url'] = "https://udger.com/resources/ua-list/devices-brand-detail?brand=" + (rC['brand_code'] || '');
                 }
             }
 
@@ -362,7 +372,7 @@ class UdgerParser {
 
             debug("parse IP address: START (IP: " + this.ip + ")");
 
-            this.ret['ip_address']['ip'] = this.ip;
+            rip['ip'] = this.ip;
 
             ipver = utils.getIpVersion(this.ip);
 
@@ -373,7 +383,7 @@ class UdgerParser {
                 }
             }
 
-            this.ret['ip_address']['ip_ver'] = ipver;
+            rip['ip_ver'] = ipver;
 
             q = this.db.prepare(
                 "SELECT udger_crawler_list.id as botid, ip_last_seen, ip_hostname, ip_country, ip_city, " +
@@ -391,34 +401,34 @@ class UdgerParser {
 
             if (r) {
 
-                this.ret['ip_address']['ip_classification'] = r['ip_classification'] || '';
-                this.ret['ip_address']['ip_classification_code'] = r['ip_classification_code'] || '';
-                this.ret['ip_address']['ip_last_seen'] = r['ip_last_seen'] || '';
-                this.ret['ip_address']['ip_hostname'] = r['ip_hostname'] || '';
-                this.ret['ip_address']['ip_country'] = r['ip_country'] || '';
-                this.ret['ip_address']['ip_country_code'] = r['ip_country_code'] || '';
-                this.ret['ip_address']['ip_city'] = r['ip_city'] || '';
+                rip['ip_classification'] = r['ip_classification'] || '';
+                rip['ip_classification_code'] = r['ip_classification_code'] || '';
+                rip['ip_last_seen'] = r['ip_last_seen'] || '';
+                rip['ip_hostname'] = r['ip_hostname'] || '';
+                rip['ip_country'] = r['ip_country'] || '';
+                rip['ip_country_code'] = r['ip_country_code'] || '';
+                rip['ip_city'] = r['ip_city'] || '';
 
-                this.ret['ip_address']['crawler_name'] = r['name'] || '';
-                this.ret['ip_address']['crawler_ver'] = r['ver'] || '';
-                this.ret['ip_address']['crawler_ver_major'] = r['ver_major'] || '';
-                this.ret['ip_address']['crawler_family'] = r['family'] || '';
-                this.ret['ip_address']['crawler_family_code'] = r['family_code'] || '';
-                this.ret['ip_address']['crawler_family_homepage'] = r['family_homepage'] || '';
-                this.ret['ip_address']['crawler_family_vendor'] = r['vendor'] || '';
-                this.ret['ip_address']['crawler_family_vendor_code'] = r['vendor_code'] || '';
-                this.ret['ip_address']['crawler_family_vendor_homepage'] = r['vendor_homepage'] || '';
-                this.ret['ip_address']['crawler_family_icon'] = r['family_icon'] || '';
+                rip['crawler_name'] = r['name'] || '';
+                rip['crawler_ver'] = r['ver'] || '';
+                rip['crawler_ver_major'] = r['ver_major'] || '';
+                rip['crawler_family'] = r['family'] || '';
+                rip['crawler_family_code'] = r['family_code'] || '';
+                rip['crawler_family_homepage'] = r['family_homepage'] || '';
+                rip['crawler_family_vendor'] = r['vendor'] || '';
+                rip['crawler_family_vendor_code'] = r['vendor_code'] || '';
+                rip['crawler_family_vendor_homepage'] = r['vendor_homepage'] || '';
+                rip['crawler_family_icon'] = r['family_icon'] || '';
                 if (r['ip_classification_code'] == 'crawler') {
-                    this.ret['ip_address']['crawler_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (r['family'] || '') + "#id" + (r['botid']|| '');
+                    rip['crawler_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (r['family'] || '') + "#id" + (r['botid']|| '');
                 }
-                this.ret['ip_address']['crawler_last_seen'] = r['last_seen'] || '';
-                this.ret['ip_address']['crawler_category'] = r['crawler_classification'] || '';
-                this.ret['ip_address']['crawler_category_code'] = r['crawler_classification_code'] || '';
-                this.ret['ip_address']['crawler_respect_robotstxt'] = r['respect_robotstxt'] || '';
+                rip['crawler_last_seen'] = r['last_seen'] || '';
+                rip['crawler_category'] = r['crawler_classification'] || '';
+                rip['crawler_category_code'] = r['crawler_classification_code'] || '';
+                rip['crawler_respect_robotstxt'] = r['respect_robotstxt'] || '';
             } else {
-                this.ret['ip_address']['ip_classification'] = 'Unrecognized';
-                this.ret['ip_address']['ip_classification_code'] = 'unrecognized';
+                rip['ip_classification'] = 'Unrecognized';
+                rip['ip_classification_code'] = 'unrecognized';
             }
 
             if (ipver === 4) {
@@ -436,9 +446,9 @@ class UdgerParser {
                 r = q.get(ipInt, ipInt);
 
                 if (r) {
-                    this.ret['ip_address']['datacenter_name'] = r['name'] || '';
-                    this.ret['ip_address']['datacenter_name_code'] = r['name_code'] || '';
-                    this.ret['ip_address']['datacenter_homepage'] = r['homepage'] || '';
+                    rip['datacenter_name'] = r['name'] || '';
+                    rip['datacenter_name_code'] = r['name_code'] || '';
+                    rip['datacenter_homepage'] = r['homepage'] || '';
                 }
 
             } else if (ipver === 6) {
@@ -468,9 +478,9 @@ class UdgerParser {
                 r = q.get(ipInts);
 
                 if (r) {
-                    this.ret['ip_address']['datacenter_name'] = r['name'] || '';
-                    this.ret['ip_address']['datacenter_name_code'] = r['name_code'] || '';
-                    this.ret['ip_address']['datacenter_homepage'] = r['homepage'] || '';
+                    rip['datacenter_name'] = r['name'] || '';
+                    rip['datacenter_name_code'] = r['name_code'] || '';
+                    rip['datacenter_homepage'] = r['homepage'] || '';
                 }
 
             }
