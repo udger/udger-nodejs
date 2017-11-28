@@ -3,9 +3,11 @@ const config = require('./lib/config');
 
 let defaultResult = config.defaultResult;
 
+let myIp = '66.249.64.50';
+
 let expected = {
     'ip_address': {
-        'ip': '66.249.64.50',   // google datacenter
+        'ip': myIp,   // google datacenter
         'ip_ver': 4,
         'ip_classification': 'Unrecognized',
         'ip_classification_code': 'unrecognized',
@@ -18,9 +20,9 @@ let expected = {
 expected = config.merge(defaultResult, expected);
 
 tap.test(
-    'User Agent: 66.249.64.50 google should be in datacenter ipv4 list',
+    'IP Address: '+myIp+' google should be in datacenter ipv4 list',
     (t) => {
-        config.udgerParser.setIP('66.249.64.50');
+        config.udgerParser.set({ip:myIp});
         let ret = config.udgerParser.parse();
         t.same(ret, expected);
         t.end();

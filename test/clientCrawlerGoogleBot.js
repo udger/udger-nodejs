@@ -3,9 +3,11 @@ const config = require('./lib/config');
 
 let defaultResult = config.defaultResult;
 
+let myUa = 'Googlebot/2.1 (+http://www.google.com/bot.html)';
+
 let expected = {
     'user_agent': {
-        'ua_string': 'Googlebot/2.1 (+http://www.google.com/bot.html)',
+        'ua_string': myUa,
         'ua_class': 'Crawler',
         'ua_class_code': 'crawler',
         'ua': 'Googlebot/2.1',
@@ -31,7 +33,7 @@ expected = config.merge(defaultResult, expected);
 tap.test(
     'User Agent: GoogleBot should be recognized',
     (t) => {
-        config.udgerParser.setUA('Googlebot/2.1 (+http://www.google.com/bot.html)');
+        config.udgerParser.set({ua:myUa});
         let ret = config.udgerParser.parse();
         t.same(ret, expected);
         t.end();

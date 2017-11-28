@@ -3,9 +3,11 @@ const config = require('./lib/config');
 
 let defaultResult = config.defaultResult;
 
+let myIp = '2001:41d0::';
+
 let expected = {
     'ip_address': {
-        'ip': '2001:41d0::',   // OVH datacenter
+        'ip': myIp,   // OVH datacenter
         'ip_ver': 6,
         'ip_classification': 'Unrecognized',
         'ip_classification_code': 'unrecognized',
@@ -18,9 +20,9 @@ let expected = {
 expected = config.merge(defaultResult, expected);
 
 tap.test(
-    'User Agent: 2001:41d0:: ovh should be in datacenter ipv6 list',
+    'IP Address: '+myIp+' ovh should be in datacenter ipv6 list',
     (t) => {
-        config.udgerParser.setIP('2001:41d0::');
+        config.udgerParser.set({ip:myIp});
         let ret = config.udgerParser.parse();
         t.same(ret, expected);
         t.end();

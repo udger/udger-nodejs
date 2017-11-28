@@ -3,9 +3,11 @@ const config = require('./lib/config');
 
 let defaultResult = config.defaultResult;
 
+let myUa = 'Googlebot/2.1 (+http://www.google.com/bot.html)';
+
 let expected = {
     'user_agent': {
-        'ua_string': 'Googlebot/2.1 (+http://www.google.com/bot.html)',
+        'ua_string': myUa,
         'ua_class': 'Crawler',
         'ua_class_code': 'crawler',
         'ua': 'Googlebot/2.1',
@@ -37,24 +39,24 @@ tap.test(
 
         let ret;
 
-        config.udgerParser.setUA('WeDontCare');
+        config.udgerParser.set({ua:'FakeUAJustToAddAnEntryInTheCache'});
         config.udgerParser.parse();
 
         expected['from_cache'] = false;
-        config.udgerParser.setUA('Googlebot/2.1 (+http://www.google.com/bot.html)');
+        config.udgerParser.set({ua:myUa});
         ret = config.udgerParser.parse();
         t.same(ret, expected, 'should not coming from cache');
 
         expected['from_cache'] = true;
-        config.udgerParser.setUA('Googlebot/2.1 (+http://www.google.com/bot.html)');
+        config.udgerParser.set({ua:myUa});
         ret = config.udgerParser.parse();
         t.same(ret, expected, 'should coming from cache');
 
-        config.udgerParser.setUA('NotGoogleBot/2.1 (+http://www.google.com/bot.html)');
+        config.udgerParser.set({ua:'FakeUAJustToAddAnEntryInTheCache'});
         config.udgerParser.parse();
 
         expected['from_cache'] = false;
-        config.udgerParser.setUA('Googlebot/2.1 (+http://www.google.com/bot.html)');
+        config.udgerParser.set({ua:myUa});
         ret = config.udgerParser.parse();
         t.same(ret, expected,' should not coming from cache');
 

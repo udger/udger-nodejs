@@ -3,9 +3,11 @@ const config = require('./lib/config');
 
 let defaultResult = config.defaultResult;
 
+let myUa = 'PINGOMETER_BOT_(HTTPS://PINGOMETER.COM)';
+
 let expected = {
     'user_agent': {
-        'ua_string': 'PINGOMETER_BOT_(HTTPS://PINGOMETER.COM)',
+        'ua_string': myUa,
         'ua_class': 'Crawler',
         'ua_class_code': 'crawler',
         'ua': 'PINGOMETER',
@@ -28,7 +30,7 @@ expected = config.merge(defaultResult, expected);
 tap.test(
     'User Agent: PingoMeter should be recognized',
     (t) => {
-        config.udgerParser.setUA('PINGOMETER_BOT_(HTTPS://PINGOMETER.COM)');
+        config.udgerParser.set({ua:myUa});
         let ret = config.udgerParser.parse();
         t.same(ret, expected);
         t.end();

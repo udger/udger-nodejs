@@ -16,12 +16,36 @@ class UdgerParser {
         this.cache = {};
     }
 
-    setUA(ua) {
-        this.ua = ua;
-    }
+    /**
+     * Initialize User-Agent or IP(v4/v6), or both
+     * @param {Object} data - An object
+     * @param {String} data.ua - User-Agent
+     * @param {String} data.ip - IP Address
+     */
+    set(data) {
 
-    setIP(ip) {
-        this.ip = ip;
+        let help = 'set() is waiting for an object having only ip and/or ua attribute';
+
+        if (!data) {
+            throw new Error(help);
+            return;
+        }
+
+        if (typeof data === 'string') {
+            throw new Error(help);
+            return;
+        }
+
+        for (let key in data) {
+            if (key === 'ua') {
+                this.ua = data.ua;
+            } else if (key === 'ip') {
+                this.ip = data.ip;
+            } else {
+                throw new Error(help);
+                return;
+            }
+        }
     }
 
     setCacheEnable(cache) {
@@ -526,7 +550,6 @@ class UdgerParser {
             }
 
             debug("parse IP address: END, unset IP address");
-            this.ip = '';
         }
 
         if (this.cacheEnable && !this.cache[keyCache]) {

@@ -3,9 +3,11 @@ const config = require('./lib/config');
 
 let defaultResult = config.defaultResult;
 
+let myIp = '2001:41d0:8:d54c::1';
+
 let expected = {
     'ip_address': {
-        'ip': '2001:41d0:8:d54c::1',   // OVH datacenter
+        'ip': myIp,   // OVH datacenter
         'ip_ver': 6,
         'ip_classification': 'Cgi proxy',
         'ip_classification_code': 'cgi_proxy',
@@ -22,9 +24,9 @@ let expected = {
 expected = config.merge(defaultResult, expected);
 
 tap.test(
-    'User Agent: 2001:41d0:: ovh cgi should be in datacenter ipv6 list',
+    'IP Address: '+myIp+' ovh cgi should be in datacenter ipv6 list',
     (t) => {
-        config.udgerParser.setIP('2001:41d0:8:d54c::1');
+        config.udgerParser.set({ip:myIp});
         let ret = config.udgerParser.parse();
         t.same(ret, expected);
         t.end();

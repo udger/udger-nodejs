@@ -3,9 +3,11 @@ const config = require('./lib/config');
 
 let defaultResult = config.defaultResult;
 
+let myUa = 'IEMobile 1.1';
+
 let expected = {
     'user_agent': {
-        'ua_string': 'IEMobile 1.1',
+        'ua_string': myUa,
         'ua_class': 'Mobile browser',
         'ua_class_code': 'mobile_browser',
         'ua': 'IE Mobile 1.1',
@@ -33,7 +35,7 @@ expected = config.merge(defaultResult, expected);
 tap.test(
     'User Agent: IEMobile 1.1 should be recognized',
     (t) => {
-        config.udgerParser.setUA('IEMobile 1.1');
+        config.udgerParser.set({ua:myUa});
         let ret = config.udgerParser.parse();
         t.same(ret, expected);
         t.end();
