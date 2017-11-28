@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/udger/udger-nodejs#readme",
   "devDependencies": {
+    "connect": "3.6.5",
     "merge-deep": "3.0.0",
     "tap": "11.0.0"
   },
