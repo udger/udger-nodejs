@@ -44,7 +44,7 @@ class UdgerParser {
             if (key === 'ua') {
                 this.ua = data.ua;
             } else if (key === 'ip') {
-                this.ip = data.ip;
+                this.ip = data.ip.toLowerCase();
             } else {
                 throw new Error(help);
                 return;
@@ -355,7 +355,7 @@ class UdgerParser {
             let rId;
             for (let r of q.iterate(bindParams)) {
                 e = ua.match(utils.phpRegexpToJs(r['regstring']));
-                if (e[1]) {
+                if (e && e[1]) {
                     match = e[1].trim();
                     rId = r["id"];
                     break;
@@ -402,7 +402,7 @@ class UdgerParser {
 
         rip['ip'] = ip;
 
-        ipver = utils.getIpVersion(this.ip);
+        ipver = utils.getIpVersion(ip);
 
         if (ipver === 4 || ipver === 6) {
             if (ipver === 6) {
@@ -425,6 +425,7 @@ class UdgerParser {
             "WHERE ip=? ORDER BY sequence"
         );
 
+        console.log(ip);
         r = q.get(ip);
 
         if (r) {
