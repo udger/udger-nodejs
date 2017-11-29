@@ -5,8 +5,13 @@ const Address4 = require('ip-address').Address4;
 const utils = require('./utils');
 const fs = require('fs-extra');
 
+/** Class exposing udger parser methods */
 class UdgerParser {
 
+    /**
+     * Load udger SQLite3 database.
+     * @param {string} file - full path to udgerdb_v3.dat
+     */
     constructor(file) {
         this.db = new Database(file, {readonly: true, fileMustExist: true});
         this.ip = null;
@@ -61,45 +66,66 @@ class UdgerParser {
         this.ret = JSON.parse(JSON.stringify(this.defaultRet));
     }
 
+    /**
+     * Activate cache
+     * @param {Boolean} cache - true or false
+     */
     setCacheEnable(cache) {
         this.cacheEnable = cache;
     }
 
+    /**
+     * Return if the cache is enable or not
+     * @return {Boolean} true if the cache is enable, false if not
+     */
+    isCacheEnable() {
+        return this.cacheEnable;
+    }
+
+    /**
+     * Set Cache Size
+     * @param {Number} records - the maximum number of items we want to keep in the cache
+     */
     setCacheSize(records) {
         this.cacheMaxRecords = records;
     }
 
-    cacheExist() {
-        if (!this.cacheEnable) {
-            return false;
+    /**
+     * Check if a key exist in the cache
+     * @param {Number} key - key can be UA or UA+IP
+     * @return {Boolean} return true if the key exist in the cache, false if not
+     */
+    cacheKeyExist(key) {
+        if (this.cache[key]) {
+            return true;
         }
-
-        if (!this.cache[this.keyCache]) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
-    cacheRead() {
-        this.ret = this.cache[this.keyCache];
-        this.ret['from_cache'] = true;
-        return this.ret;
+    /**
+     * Return an item from the cache
+     * @param {String} key - key can be UA or UA+IP
+     * @return {Object} stored parser result
+     */
+    cacheRead(key) {
+        let ret = this.cache[key];
+        ret['from_cache'] = true;
+        return ret;
     }
 
-    cacheWrite() {
-        if (!this.cacheEnable) {
+    /**
+     * Write an item into the cache
+     * @param {String} key - key can be UA or UA+IP
+     */
+    cacheWrite(key, data) {
+        if (this.cache[key]) {
+            // already in the cache
             return;
         }
 
-        if (this.cache[this.keyCache]) {
-            // already here
-            return;
-        }
+        this.cache[key] = data;
 
-        this.cache[this.keyCache] = this.ret;
-
-        debug("cache: store result of %s (length=%s)", this.keyCache);
+        debug("cache: store result of %s (length=%s)", key);
         debug("cache: entries count: %s/%s",(Object.keys(this.cache).length || 0), this.cacheMaxRecords);
 
         // warning, js object is used for performance reason
@@ -112,6 +138,10 @@ class UdgerParser {
         }
     }
 
+    /**
+     * Parse the User-Agent string
+     * @param {String} ua - An User-Agent string
+     */
     parseUa(ua) {
         if (!ua) return;
 
@@ -388,6 +418,10 @@ class UdgerParser {
         debug("parse useragent string: END, unset useragent string");
     }
 
+    /**
+     * Parse the IP Address
+     * @param {String} ip - An IPv4 or IPv6 Address
+     */
     parseIp(ip) {
 
         if (!ip) return;
@@ -425,7 +459,6 @@ class UdgerParser {
             "WHERE ip=? ORDER BY sequence"
         );
 
-        console.log(ip);
         r = q.get(ip);
 
         if (r) {
@@ -517,16 +550,25 @@ class UdgerParser {
         debug("parse IP address: END");
     }
 
+    /**
+     * Main parser
+     * @return {Object} Parsing result
+     */
     parse() {
 
-        if (this.cacheExist()) {
-            return this.cacheRead();
+        if (
+            this.isCacheEnable() &&
+            this.cacheKeyExist(this.keyCache)
+        ) {
+            return this.cacheRead(this.keyCache);
         }
 
         this.parseUa(this.ua);
         this.parseIp(this.ip);
 
-        this.cacheWrite();
+        if (this.isCacheEnable()) {
+            this.cacheWrite(this.keyCache, this.ret);
+        }
 
         return this.ret;
     }
