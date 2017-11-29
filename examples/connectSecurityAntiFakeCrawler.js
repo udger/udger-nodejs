@@ -1,4 +1,4 @@
-const udgerParser = require('../')('test/db/udgerdb_v3.dat');
+const udgerParser = require('../')('test/db/udgerdb_v3_test.dat');
 const http = require('http');
 
 var app = require('connect')();
