@@ -14,20 +14,20 @@ Datacenter name .. etc.)
 - Tested with more the 50.000 unique user agents.
 - Up to date data provided by https://udger.com/
 
-### Requirements
+## Requirements
  - nodejs >= 8.9.0
  - datafile v3 (udgerdb_v3.dat) from https://data.udger.com/
 
-### Features
+## Features
 - Fast
 - LRU cache
 - Released under the MIT
 
-### Install
+## Install
     npm install udger-nodejs
 
-### Usage
-You should review the included examples in `examples/` directory
+## Usage
+You should review the included examples in `examples/` and `test/` directory.
 
 Here's a quick example:
 
@@ -45,7 +45,7 @@ let ret = udgerParser.parse();
 console.log(JSON.stringify(ret, null, 4));
 ```
 
-Output
+Result
 
 ```
 {
@@ -129,7 +129,153 @@ Output
 ```
 
 
-### LRU Cache
+## Result formats
+By default, JSON Udger format is used. The JSON Udger format is coming from the PHP Parser (compatibility)
+Others JSON format are available, by passing options in `udger.parse()` function.
+
+### Native Udger JSON Format (default)
+
+#### Usage
+
+```js
+udgerParser.parse();
+```
+
+#### Result
+
+```
+{
+    "ip_address": {
+        "ip": "66.249.64.73",
+        "ip_ver": 4,
+        "ip_classification": "Crawler",
+        "ip_classification_code": "crawler",
+        "ip_hostname": "crawl-66-249-64-73.googlebot.com",
+        "ip_last_seen": "2016-10-02 09:16:57",
+        "ip_country": "United States",
+        "ip_country_code": "US",
+        "ip_city": "Mountain View",
+        "crawler_name": "Googlebot/2.1",
+        "crawler_ver": "2.1",
+        "crawler_ver_major": "2",
+        "crawler_family": "Googlebot",
+        "crawler_family_code": "googlebot",
+        "crawler_family_homepage": "http://www.google.com/bot.html",
+        "crawler_family_vendor": "Google Inc.",
+        "crawler_family_vendor_code": "google_inc",
+        "crawler_family_vendor_homepage": "https://www.google.com/about/company/",
+        "crawler_family_icon": "bot_googlebot.png",
+        "crawler_family_info_url": "https://udger.com/resources/ua-list/bot-detail?bot=Googlebot#id31",
+        "crawler_last_seen": "2017-01-06 17:52:46",
+        "crawler_category": "Search engine bot",
+        "crawler_category_code": "search_engine_bot",
+        "crawler_respect_robotstxt": "yes",
+        "datacenter_name": "Google sites",
+        "datacenter_name_code": "googgle_sites",
+        "datacenter_homepage": "http://sites.google.com/"
+    }
+}
+```
+
+### Compact JSON Format
+
+#### Usage
+
+```js
+udgerParser.parse({json:true});
+```
+
+#### Result
+
+```js
+{
+    "ipAddress": {
+        "ip": "66.249.64.73",
+        "classification": "crawler",
+        "lastSeen": "2016-10-02 09:16:57",
+        "hostname": "crawl-66-249-64-73.googlebot.com",
+        "geo": {
+            "country": {
+                "name": "United States",
+                "code": "US"
+            },
+            "city": "Mountain View"
+        },
+        "crawler": {
+            "name": "Googlebot/2.1",
+            "family": "googlebot",
+            "category": "search_engine_bot",
+            "lastSeen": "2017-01-06 17:52:46"
+        },
+        "datacenter": "googgle_sites"
+    }
+}
+```
+
+### Full JSON Format
+
+#### Usage
+
+```js
+udgerParser.parse({json:true, full:true});
+```
+
+#### Result
+
+```js
+{
+    "ipAddress": {
+        "ip": "66.249.64.73",
+        "version": 4,
+        "classification": {
+            "name": "Crawler",
+            "code": "crawler"
+        },
+        "lastSeen": "2016-10-02 09:16:57",
+        "hostname": "crawl-66-249-64-73.googlebot.com",
+        "geo": {
+            "country": {
+                "name": "United States",
+                "code": "US"
+            },
+            "city": "Mountain View"
+        },
+        "crawler": {
+            "name": "Googlebot/2.1",
+            "version": {
+                "current": "2.1",
+                "major": "2"
+            },
+            "family": {
+                "name": "Googlebot",
+                "code": "googlebot",
+                "homepage": "http://www.google.com/bot.html",
+                "vendor": {
+                    "name": "Google Inc.",
+                    "code": "google_inc",
+                    "homepage": "https://www.google.com/about/company/"
+                },
+                "icon": "bot_googlebot.png",
+                "infoUrl": "https://udger.com/resources/ua-list/bot-detail?bot=Googlebot#id31"
+            },
+            "lastSeen": "2017-01-06 17:52:46",
+            "category": {
+                "name": "Search engine bot",
+                "code": "search_engine_bot"
+            },
+            "respectRobotsTxt": "search_engine_bot"
+        },
+        "datacenter": {
+            "name": "Google sites",
+            "code": "googgle_sites",
+            "homepage": "http://sites.google.com/"
+        }
+    },
+    "fromCache": false
+}
+```
+
+## LRU Cache
 By default, cache is disable. To enable cache, just add this line BEFORE using udgerParser.set():
 
     // by default, cache size is 4000 keys (a key can be an UA, or UA+IP)
@@ -140,21 +286,21 @@ By default, cache is disable. To enable cache, just add this line BEFORE using u
 When a record is coming from the cache, the "from_cache" attribute in the response is "true"
 
 
-### Running tests
+## Running tests
     npm test
 
 
-### Automatic updates download
+## Automatic updates download
 - for autoupdate data use Udger data updater (https://udger.com/support/documentation/?doc=62)
 
 
-### Documentation for programmers
+## Documentation for programmers
 - https://udger.com/pub/documentation/parser/NodeJS/html/
 
 
-### Author
+## Author
 - The Udger.com Team (info@udger.com)
 
 
-### old v2 format
+## old v2 format
 This module does not support v2 format
