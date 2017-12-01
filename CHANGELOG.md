@@ -6,7 +6,7 @@ and this project NOT YET adheres to [Semantic Versioning](http://semver.org/spec
 
 ## [1.0.1] - 2017-12-01
 ### Changed
-* #18: fix defaultResult.json path
+* #18 : fix defaultResult.json path
 
 ## [1.0.0] - 2017-12-01
 ### Added
