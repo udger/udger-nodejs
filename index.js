@@ -5,6 +5,7 @@ const Address4 = require('ip-address').Address4;
 const utils = require('./utils');
 const fs = require('fs-extra');
 const dotProp = require('dot-prop');
+const path = require('path');
 
 /** Class exposing udger parser methods */
 class UdgerParser {
@@ -23,7 +24,7 @@ class UdgerParser {
         this.cache = {};
         this.keyCache = '';
 
-        this.defaultRet = fs.readJsonSync('./defaultResult.json');
+        this.defaultRet = fs.readJsonSync(path.resolve(__dirname+'/defaultResult.json'));
         this.retUa = {};
         this.retIp = {};
     }
