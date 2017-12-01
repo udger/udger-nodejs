@@ -6,12 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.0.1] - 2017-12-01
 ### Fixed
-* [#18] fix defaultResult.json path
+* defaultResult.json path [#18](https://github.com/udger/udger-nodejs/issues/18)
 
 ## [1.0.0] - 2017-12-01
 ### Added
-* #12: Compact output JSON Format #12
-* #12: Full output JSON Format, respecting Udger data
+* Compact output JSON Format [#12](https://github.com/udger/udger-nodejs/issues/18)
+* Full output JSON Format, respecting Udger data [#12](https://github.com/udger/udger-nodejs/issues/18)
 
 ### Changed
 * Start following SemVer properly.
