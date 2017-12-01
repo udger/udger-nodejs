@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "better-sqlite3": "4.0.3",
+    "dot-prop": "4.2.0",
     "fs-extra": "4.0.2",
     "ip-address": "5.8.8",
     "node-gyp": "3.6.2"
