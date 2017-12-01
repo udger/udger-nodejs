@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project NOT YET adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2017-12-01
+### Changed
+* #18: fix defaultResult.json path
+
 ## [1.0.0] - 2017-12-01
 ### Added
 * #12: Compact output JSON Format #12
