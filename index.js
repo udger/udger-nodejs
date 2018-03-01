@@ -16,6 +16,7 @@ class UdgerParser {
      */
     constructor(file) {
         this.db = new Database(file, {readonly: true, fileMustExist: true});
+        this.file = file;
         this.ip = null;
         this.ua = null;
 
@@ -27,6 +28,32 @@ class UdgerParser {
         this.defaultRet = fs.readJsonSync(path.resolve(__dirname+'/defaultResult.json'));
         this.retUa = {};
         this.retIp = {};
+    }
+
+    /**
+     * Connect (reconnect) sqlite database
+     * @return {Boolean} true if db has been opened, false if already connected
+     */
+    connect() {
+        if (!this.db) {
+            this.db = new Database(this.file, {readonly: true, fileMustExist: true});
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Disconnect sqlite database, avoid read/write conflict
+     * see https://github.com/udger/udger-updater-nodejs/issues/5
+     * @return {Boolean} true if db has been closed, false if no db opened
+     */
+    disconnect() {
+        if (this.db) {
+            this.db.close();
+            this.db = null;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -147,6 +174,13 @@ class UdgerParser {
             debug("cache: removing entry",Object.keys(this.cache)[0]);
             delete this.cache[Object.keys(this.cache)[0]];
         }
+    }
+
+    /**
+     * Clean the cache
+     */
+    cacheClean() {
+        this.cache = {};
     }
 
     /**
@@ -812,6 +846,8 @@ class UdgerParser {
      * @return {Object} Parsing result
      */
     parse(opts) {
+
+        if (!this.db) return {};
 
         if (
             this.isCacheEnable() &&
