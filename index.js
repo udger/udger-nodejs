@@ -6,6 +6,7 @@ const utils = require('./utils');
 const fs = require('fs-extra');
 const dotProp = require('dot-prop');
 const path = require('path');
+const RandExp = require('randexp');
 
 /** Class exposing udger parser methods */
 class UdgerParser {
@@ -874,6 +875,143 @@ class UdgerParser {
         }
 
         return ret;
+    }
+
+    randomSanityChecks(max, callback) {
+        if (!this.db) {
+            callback(new Error("Database not ready"));
+            return false;
+        }
+
+        if (!max) {
+            callback(new Error('Please specify maximum number of records'));
+            return false;
+        }
+
+        if (typeof max!= "number") {
+            callback(new Error('Maximum number of records is not a number'));
+            return false;
+        }
+
+        return true;
+    }
+
+    randomCrawlers(max, callback) {
+
+        if (!this.randomSanityChecks(max, callback)) return;
+
+        let q = this.db.prepare(
+            "SELECT ua_string FROM udger_crawler_list ORDER BY RANDOM() LIMIT ?"
+        );
+
+        callback(null, q.all(max));
+        return;
+    }
+
+    randomClientsRegex(max, callback) {
+        if (!this.randomSanityChecks(max, callback)) return;
+
+        let q = this.db.prepare(
+            "SELECT regstring FROM udger_client_regex ORDER BY RANDOM() LIMIT ?"
+        );
+
+        callback(null, q.all(max));
+        return;
+    }
+
+    randomClients(max, callback) {
+
+        if (!this.randomSanityChecks(max, callback)) return;
+        this.randomClientsRegex(max, (err, results) => {
+            let regex;
+            let regexClean;
+            let randomUA;
+            let re;
+            let reClean;
+            for (let i = 0, len=results.length; i<len; i++) {
+                regex = new RegExp(results[i].regstring);
+                regexClean = results[i].regstring.replace(/^\//,'');
+                regexClean = regexClean.replace(/\/si$/,'');
+                reClean = new RegExp(regexClean);
+                re = new RandExp(reClean);
+
+                re.max = 5;                         // limit random for * and +
+                re.defaultRange.subtract(32, 126);  // remove defaults random chars
+                re.defaultRange.add(43, 43);        // add +
+                re.defaultRange.add(45, 46);        // add . and -
+                re.defaultRange.add(48, 57);        // add 0-9
+                re.defaultRange.add(97, 122);       // add a-z
+                re.defaultRange.add(65, 90);        // add A-Z
+
+                randomUA = re.gen();
+
+                results[i].randomUA = randomUA;
+
+                /*
+                if (!randomUA.match(reClean)) {
+                    console.log('original',results[i].regstring);
+                    console.log('clean',regexClean);
+                    console.log('ua',ua);
+                    console.log('result',randomUA.match(new RegExp(regexClean)));
+                }
+                */
+            }
+
+            callback(null, results);
+        })
+    }
+
+    randomIpv4(max, callback) {
+        if (!this.randomSanityChecks(max, callback)) return;
+
+        let q = this.db.prepare(
+            "SELECT ip FROM udger_ip_list WHERE ip LIKE '%.%.%.%' ORDER BY RANDOM() LIMIT ?"
+        );
+
+        callback(null, q.all(max));
+        return;
+    }
+
+    getClientsClassification(callback) {
+        if (!this.db) {
+            callback(new Error("Database not ready"));
+            return false;
+        }
+
+        let q = this.db.prepare(
+            "SELECT client_classification, client_classification_code FROM udger_client_class"
+        )
+
+        callback(null, q.all());
+        return;
+    }
+
+    getCrawlersClassification(callback) {
+        if (!this.db) {
+            callback(new Error("Database not ready"));
+            return false;
+        }
+
+        let q = this.db.prepare(
+            "SELECT crawler_classification, crawler_classification_code FROM udger_crawler_class"
+        )
+
+        callback(null, q.all());
+        return;
+    }
+
+    getIpsClassification(callback) {
+        if (!this.db) {
+            callback(new Error("Database not ready"));
+            return false;
+        }
+
+        let q = this.db.prepare(
+            "SELECT ip_classification, ip_classification_code FROM udger_ip_class"
+        )
+
+        callback(null, q.all());
+        return;
     }
 }
 

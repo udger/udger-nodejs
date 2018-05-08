@@ -285,6 +285,90 @@ By default, cache is disable. To enable cache, just add this line BEFORE using u
 
 When a record is coming from the cache, the "from_cache" attribute in the response is "true"
 
+## Helpers
+
+### randomCrawlers
+
+    // return random ua_string from udger_crawler_list table
+    //  [
+    //      { ua_string: 'Googlebot/2.1 (+http://www.google.com/bot.html)' },
+    //      { ua_string: 'Mozilla/5.0 (compatible; SeznamBot/3.2-test1; +http://napoveda.seznam.cz/en/seznambot-intro/)' },
+    //      ......
+    //  ]
+
+    udgerParser.randomCrawlers(10);
+
+### randomClientsRegex
+
+    // return random regstring from udger_client_regex table
+    //  [
+    //      { regstring: '/^Microsoft Office\\/16.*Microsoft Outlook Mail 16/si' },
+    //      { regstring: '/Mozilla.*Linux.*Android.*WebKit.*Version\\/([0-9\\.]+)/si' },
+    //      ......
+    //  ]
+
+    udgerParser.randomClientsRegex(10);
+
+### randomClients
+
+    // return random generated UA strings based in regstring (udger_client_regex)
+    //  [
+    //      {
+    //          regstring: '/^Mozilla.*MSIE.*Windows Phone.*IEMobile\\/([0-9\\.]+)/si',
+    //          randomUA: 'MozillaMSIEQSs-0Windows PhoneTD7Y9IEMobile/24304'
+    //      },
+    //      {
+    //          regstring: '/mozilla.*rv:[0-9\\.]+.*servo.*firefox\\/([0-9a-z\\+\\-\\.]+).*/si',
+    //          randomUA: 'mozillatWrv:90221.GeservoTKqzfirefox/y-l+h'
+    //      }
+    //      ......
+    //  ]
+
+    udgerParser.randomClients(10);
+
+### randomIpv4
+
+    // return random ipv4 matching XXX.XXX.XXX.XXX from udger_ip_list (identified as "bad" IPs)
+    //  [
+    //      { ip: '108.61.199.93' },
+    //      { ip: '66.249.64.73' }
+    //      .....
+    //  ]
+
+    udgerParser.randomIpv4(10);
+
+### getClientsClassification
+
+    // return data from udger_client_class table
+    //  [
+    //      { client_classification: 'Browser', client_classification_code: 'browser' },
+    //      { client_classification: 'Offline browser', client_classification_code: 'offline_browser' },
+    //      .....
+    // ]
+
+    udgerParser.getClientClassification();
+
+### getCrawlersClassification
+
+    // return data from udger_crawler_class table
+    //  [
+    //      { crawler_classification: 'Uncategorised', crawler_classification_code: 'uncategorised' },
+    //      { crawler_classification: 'Search engine bot', crawler_classification_code: 'search_engine_bot' },
+    //      .....
+    //  ]
+
+    udgerParser.getCrawlersClassification();
+
+### getIpsClassification
+
+    // return data from udger_ip_class table
+    //  [
+    //      { ip_classification: 'Tor exit node', ip_classification_code: 'tor_exit_node' },
+    //      { ip_classification: 'Fake crawler', ip_classification_code: 'fake_crawler' },
+    //      .....
+    //  ]
+
+    udgerParser.getIpsClassification();
 
 ## Running tests
     npm test
@@ -304,4 +388,3 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
 
 ## old v2 format
 This module does not support v2 format
-
