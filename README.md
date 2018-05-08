@@ -359,6 +359,21 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
 
     udgerParser.getCrawlersClassification((err, results) => {});
 
+### getUACrawlersFamilies
+
+    // return callback with data from mixed udger_crawler_class, udger_crawler_list tables
+    //  [
+    //      {
+    //          family: 'Googlebot',
+    //          family_code: 'googlebot',
+    //          crawler_classification: 'Search engine bot',
+    //          crawler_classification_code: 'search_engine_bot'
+    //      },
+    //      ....
+    //  ]
+
+    udgerParser.getUACrawlersFamilies((err, results) => {});
+
 ### getIpsClassification
 
     // return callback with data from udger_ip_class table

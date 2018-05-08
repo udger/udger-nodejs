@@ -1000,6 +1000,24 @@ class UdgerParser {
         return;
     }
 
+    getUACrawlersFamilies(callback) {
+        if (!this.db) {
+            callback(new Error("Database not ready"));
+            return false;
+        }
+
+        let q = this.db.prepare(
+            "SELECT DISTINCT family, family_code,"+
+            "udger_crawler_class.crawler_classification,"+
+            "udger_crawler_class.crawler_classification_code "+
+            "FROM udger_crawler_list "+
+            "LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id"
+        )
+
+        callback(null, q.all());
+        return;
+    }
+
     getIPsClassification(callback) {
         if (!this.db) {
             callback(new Error("Database not ready"));
