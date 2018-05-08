@@ -4,7 +4,7 @@ const config = require('./lib/config');
 let max = 3;
 
 tap.test(
-    'get User-Agent Crawlers classification',
+    'Get User-Agent Crawlers classification',
     (t) => {
         config.udgerParser.getUACrawlersClassification((err, results) => {
             t.equal(err, null, "should NOT return an error");

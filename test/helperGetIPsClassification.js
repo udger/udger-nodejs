@@ -4,7 +4,7 @@ const config = require('./lib/config');
 let max = 3;
 
 tap.test(
-    'get ip classification',
+    'Get ip classification',
     (t) => {
         config.udgerParser.getIPsClassification((err, results) => {
             t.equal(err, null, "should NOT return an error");

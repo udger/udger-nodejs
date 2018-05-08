@@ -4,7 +4,7 @@ const config = require('./lib/config');
 let max = 3;
 
 tap.test(
-    'get User-Agent Clients classification',
+    'Get User-Agent Clients classification',
     (t) => {
         config.udgerParser.getUAClientsClassification((err, results) => {
             t.equal(err, null, "should NOT return an error");
