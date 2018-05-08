@@ -4,11 +4,11 @@ const config = require('./lib/config');
 let max = 3;
 
 tap.test(
-    'get clients classification',
+    'Random User-Agent Crawlers ('+max+')',
     (t) => {
-        config.udgerParser.getClientsClassification((err, results) => {
+        config.udgerParser.randomUACrawlers(max, (err, results) => {
             t.equal(err, null, "should NOT return an error");
-            t.equal(results.length>0, true, "should return some results");
+            t.equal(results.length, max, "should return "+max+" results");
             t.end();
         });
     }

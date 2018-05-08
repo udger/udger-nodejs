@@ -287,7 +287,7 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
 
 ## Helpers
 
-### randomCrawlers
+### randomUACrawlers
 
     // return callback with random ua_string from udger_crawler_list table
     //  [
@@ -296,9 +296,9 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
     //      ......
     //  ]
 
-    udgerParser.randomCrawlers(10, (err, results) => {});
+    udgerParser.randomUACrawlers(10, (err, results) => {});
 
-### randomClientsRegex
+### randomUAClientsRegex
 
     // return callback with random regstring from udger_client_regex table
     //  [
@@ -307,9 +307,9 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
     //      ......
     //  ]
 
-    udgerParser.randomClientsRegex(10, (err, results) => {});
+    udgerParser.randomUAClientsRegex(10, (err, results) => {});
 
-### randomClients
+### randomUAClients
 
     // return callback with random generated UA strings based in regstring (udger_client_regex)
     //  [
@@ -324,9 +324,9 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
     //      ......
     //  ]
 
-    udgerParser.randomClients(10, (err, results) => {});
+    udgerParser.randomUAClients(10, (err, results) => {});
 
-### randomIpv4
+### randomIPv4
 
     // return callback with random ipv4 matching XXX.XXX.XXX.XXX from udger_ip_list (identified as "bad" IPs)
     //  [
@@ -335,7 +335,7 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
     //      .....
     //  ]
 
-    udgerParser.randomIpv4(10, (err, results) => {});
+    udgerParser.randomIPv4(10, (err, results) => {});
 
 ### getClientsClassification
 

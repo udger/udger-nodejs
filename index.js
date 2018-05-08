@@ -896,7 +896,7 @@ class UdgerParser {
         return true;
     }
 
-    randomCrawlers(max, callback) {
+    randomUACrawlers(max, callback) {
 
         if (!this.randomSanityChecks(max, callback)) return;
 
@@ -908,7 +908,7 @@ class UdgerParser {
         return;
     }
 
-    randomClientsRegex(max, callback) {
+    randomUAClientsRegex(max, callback) {
         if (!this.randomSanityChecks(max, callback)) return;
 
         let q = this.db.prepare(
@@ -919,10 +919,10 @@ class UdgerParser {
         return;
     }
 
-    randomClients(max, callback) {
+    randomUAClients(max, callback) {
 
         if (!this.randomSanityChecks(max, callback)) return;
-        this.randomClientsRegex(max, (err, results) => {
+        this.randomUAClientsRegex(max, (err, results) => {
             let regex;
             let regexClean;
             let randomUA;
@@ -961,7 +961,7 @@ class UdgerParser {
         })
     }
 
-    randomIpv4(max, callback) {
+    randomIPv4(max, callback) {
         if (!this.randomSanityChecks(max, callback)) return;
 
         let q = this.db.prepare(
@@ -972,7 +972,7 @@ class UdgerParser {
         return;
     }
 
-    getClientsClassification(callback) {
+    getUAClientsClassification(callback) {
         if (!this.db) {
             callback(new Error("Database not ready"));
             return false;
@@ -986,7 +986,7 @@ class UdgerParser {
         return;
     }
 
-    getCrawlersClassification(callback) {
+    getUACrawlersClassification(callback) {
         if (!this.db) {
             callback(new Error("Database not ready"));
             return false;
@@ -1000,7 +1000,7 @@ class UdgerParser {
         return;
     }
 
-    getIpsClassification(callback) {
+    getIPsClassification(callback) {
         if (!this.db) {
             callback(new Error("Database not ready"));
             return false;
