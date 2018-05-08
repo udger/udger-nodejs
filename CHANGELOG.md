@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.3.0](https://github.com/udger/udger-nodejs/compare/v1.3.0...v1.2.1) - 2018-05-08
+### Added
+* implement helpers [#25](https://github.com/udger/udger-nodejs/issues/25)
+
+## [1.2.1](https://github.com/udger/udger-nodejs/compare/v1.2.1...v1.2.0) - 2018-05-07
+### Changed
+* update npm packages [#21](https://github.com/udger/udger-nodejs/issues/21)
+
+## [1.2.0](https://github.com/udger/udger-nodejs/compare/v1.2.0...v1.0.1) - 2018-03-01
+### Added
+* Missing features for udger database update [#19](https://github.com/udger/udger-nodejs/issues/19)
+
 ## [1.0.1](https://github.com/udger/udger-nodejs/compare/v1.0.1...v1.0.0) - 2017-12-01
 ### Fixed
 * defaultResult.json path [#18](https://github.com/udger/udger-nodejs/issues/18)
