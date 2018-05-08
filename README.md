@@ -337,7 +337,7 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
 
     udgerParser.randomIPv4(10, (err, results) => {});
 
-### getClientsClassification
+### getUAClientsClassification
 
     // return callback with data from udger_client_class table
     //  [
@@ -346,9 +346,9 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
     //      .....
     // ]
 
-    udgerParser.getClientClassification((err, results) => {});
+    udgerParser.getUAClientsClassification((err, results) => {});
 
-### getCrawlersClassification
+### getUACrawlersClassification
 
     // return callback with data from udger_crawler_class table
     //  [
@@ -357,7 +357,7 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
     //      .....
     //  ]
 
-    udgerParser.getCrawlersClassification((err, results) => {});
+    udgerParser.getUACrawlersClassification((err, results) => {});
 
 ### getUACrawlersFamilies
 
