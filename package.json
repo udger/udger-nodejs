@@ -1,6 +1,6 @@
 {
   "name": "udger-nodejs",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "NodeJS User-Agent String Parser based on Udger SQLite databases https://udger.com/products/local_parser",
   "main": "index.js",
   "directories": {
