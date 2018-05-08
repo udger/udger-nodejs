@@ -289,29 +289,29 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
 
 ### randomCrawlers
 
-    // return random ua_string from udger_crawler_list table
+    // return callback with random ua_string from udger_crawler_list table
     //  [
     //      { ua_string: 'Googlebot/2.1 (+http://www.google.com/bot.html)' },
     //      { ua_string: 'Mozilla/5.0 (compatible; SeznamBot/3.2-test1; +http://napoveda.seznam.cz/en/seznambot-intro/)' },
     //      ......
     //  ]
 
-    udgerParser.randomCrawlers(10);
+    udgerParser.randomCrawlers(10, (err, results) => {});
 
 ### randomClientsRegex
 
-    // return random regstring from udger_client_regex table
+    // return callback with random regstring from udger_client_regex table
     //  [
     //      { regstring: '/^Microsoft Office\\/16.*Microsoft Outlook Mail 16/si' },
     //      { regstring: '/Mozilla.*Linux.*Android.*WebKit.*Version\\/([0-9\\.]+)/si' },
     //      ......
     //  ]
 
-    udgerParser.randomClientsRegex(10);
+    udgerParser.randomClientsRegex(10, (err, results) => {});
 
 ### randomClients
 
-    // return random generated UA strings based in regstring (udger_client_regex)
+    // return callback with random generated UA strings based in regstring (udger_client_regex)
     //  [
     //      {
     //          regstring: '/^Mozilla.*MSIE.*Windows Phone.*IEMobile\\/([0-9\\.]+)/si',
@@ -324,51 +324,51 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
     //      ......
     //  ]
 
-    udgerParser.randomClients(10);
+    udgerParser.randomClients(10, (err, results) => {});
 
 ### randomIpv4
 
-    // return random ipv4 matching XXX.XXX.XXX.XXX from udger_ip_list (identified as "bad" IPs)
+    // return callback with random ipv4 matching XXX.XXX.XXX.XXX from udger_ip_list (identified as "bad" IPs)
     //  [
     //      { ip: '108.61.199.93' },
     //      { ip: '66.249.64.73' }
     //      .....
     //  ]
 
-    udgerParser.randomIpv4(10);
+    udgerParser.randomIpv4(10, (err, results) => {});
 
 ### getClientsClassification
 
-    // return data from udger_client_class table
+    // return callback with data from udger_client_class table
     //  [
     //      { client_classification: 'Browser', client_classification_code: 'browser' },
     //      { client_classification: 'Offline browser', client_classification_code: 'offline_browser' },
     //      .....
     // ]
 
-    udgerParser.getClientClassification();
+    udgerParser.getClientClassification((err, results) => {});
 
 ### getCrawlersClassification
 
-    // return data from udger_crawler_class table
+    // return callback with data from udger_crawler_class table
     //  [
     //      { crawler_classification: 'Uncategorised', crawler_classification_code: 'uncategorised' },
     //      { crawler_classification: 'Search engine bot', crawler_classification_code: 'search_engine_bot' },
     //      .....
     //  ]
 
-    udgerParser.getCrawlersClassification();
+    udgerParser.getCrawlersClassification((err, results) => {});
 
 ### getIpsClassification
 
-    // return data from udger_ip_class table
+    // return callback with data from udger_ip_class table
     //  [
     //      { ip_classification: 'Tor exit node', ip_classification_code: 'tor_exit_node' },
     //      { ip_classification: 'Fake crawler', ip_classification_code: 'fake_crawler' },
     //      .....
     //  ]
 
-    udgerParser.getIpsClassification();
+    udgerParser.getIpsClassification((err, results) => {});
 
 ## Running tests
     npm test
