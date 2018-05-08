@@ -1007,11 +1007,13 @@ class UdgerParser {
         }
 
         let q = this.db.prepare(
-            "SELECT DISTINCT family, family_code,"+
-            "udger_crawler_class.crawler_classification,"+
-            "udger_crawler_class.crawler_classification_code "+
-            "FROM udger_crawler_list "+
-            "LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id"
+            'SELECT DISTINCT '+
+            'udger_crawler_list.family_code,'+
+            'udger_crawler_class.crawler_classification_code '+
+            'FROM udger_crawler_list '+
+            'LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id '+
+            'WHERE family_code != "" '+
+            'ORDER BY family_code, crawler_classification_code'
         )
 
         callback(null, q.all());
