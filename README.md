@@ -383,6 +383,17 @@ When a record is coming from the cache, the "from_cache" attribute in the respon
 
     udgerParser.getIpsClassification((err, results) => {});
 
+### getDatabaseInfo
+
+    // return callback with single record from udger_db_info table
+    //  {
+    //      version: '20170106-01',
+    //      information: 'Data v3 for Local parser - test data, no full database',
+    //      lastupdate: 1483690193
+    //  }
+
+    udgerParser.getDatabaseInfo((err, result) => {});
+
 ## Running tests
     npm test
 
