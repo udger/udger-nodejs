@@ -1020,6 +1020,23 @@ class UdgerParser {
         return;
     }
 
+    getDatabaseInfo(callback) {
+        if (!this.db) {
+            callback(new Error("Database not ready"));
+            return false;
+        }
+
+        let q = this.db.prepare(
+            "SELECT * FROM udger_db_info"
+        )
+
+        let result = q.get();
+        delete result.key;
+
+        callback(null, result);
+        return;
+    }
+
     getIPsClassification(callback) {
         if (!this.db) {
             callback(new Error("Database not ready"));
