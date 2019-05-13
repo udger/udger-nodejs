@@ -1,5 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
-/.idea/
+/.nyc_output/
 /node_modules/
-*.iml
 /test/db/udgerdb_v3.dat
