@@ -5,14 +5,14 @@ var app = require('connect')();
 
 http.createServer(app).listen(8082, '127.0.0.1');
 
-app.use(function (req, res, next) {
+app.use(function (req, res) {
 
     udgerParser.set({
         ua:req.headers['user-agent'],
         ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress
     });
 
-    let result = udgerParser.parse();
+    const result = udgerParser.parse();
 
     if (result['ip_address']['ip_classification_code'] === 'fake_crawler') {
         res.status(403);

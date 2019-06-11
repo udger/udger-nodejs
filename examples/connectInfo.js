@@ -12,7 +12,7 @@ app.use(function (req, res, next) {
         ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress
     });
 
-    let result = udgerParser.parse();
+    const result = udgerParser.parse();
 
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(result, null, 4));

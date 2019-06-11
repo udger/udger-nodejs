@@ -5,7 +5,7 @@ udgerParser.set({
     ip:'2A02:598:7000:116:0:0:0:101'
 });
 
-let ret = udgerParser.parse();
+const ret = udgerParser.parse();
 
 // beautify json output with 4 spaces indent
 console.log(JSON.stringify(ret, null, 4));
