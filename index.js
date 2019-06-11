@@ -16,7 +16,7 @@ class UdgerParser {
      * @param {string} file - full path to udgerdb_v3.dat
      */
     constructor(file) {
-        this.db = new Database(file, {readonly: true, fileMustExist: true});
+        this.db = new Database(file, { readonly: true, fileMustExist: true });
         this.file = file;
         this.ip = null;
         this.ua = null;
@@ -37,7 +37,7 @@ class UdgerParser {
      */
     connect() {
         if (!this.db) {
-            this.db = new Database(this.file, {readonly: true, fileMustExist: true});
+            this.db = new Database(this.file, { readonly: true, fileMustExist: true });
             return true;
         }
         return false;
@@ -65,26 +65,23 @@ class UdgerParser {
      */
     set(data) {
 
-        let help = 'set() is waiting for an object having only ip and/or ua attribute';
+        const help = 'set() is waiting for an object having only ip and/or ua attribute';
 
         if (!data) {
             throw new Error(help);
-            return;
         }
 
         if (typeof data === 'string') {
             throw new Error(help);
-            return;
         }
 
-        for (let key in data) {
+        for (const key in data) {
             if (key === 'ua') {
                 this.ua = data.ua;
             } else if (key === 'ip') {
                 this.ip = data.ip.toLowerCase();
             } else {
                 throw new Error(help);
-                return;
             }
         }
 
@@ -141,7 +138,7 @@ class UdgerParser {
      * @return {Object} stored parser result
      */
     cacheRead(key, opts) {
-        let ret = this.cache[key];
+        const ret = this.cache[key];
         if (opts && opts.json) {
             if (opts.full) {
                 ret['fromCache'] = true;
@@ -164,15 +161,15 @@ class UdgerParser {
 
         this.cache[key] = data;
 
-        debug("cache: store result of %s (length=%s)", key);
-        debug("cache: entries count: %s/%s",(Object.keys(this.cache).length || 0), this.cacheMaxRecords);
+        debug('cache: store result of %s (length=%s)', key);
+        debug('cache: entries count: %s/%s', (Object.keys(this.cache).length || 0), this.cacheMaxRecords);
 
         // warning, js object is used for performance reason
         // as opposite of php object, we can not use splice/pop stuff here
         // so, when an entry must be remove because the cache is full, we
         // can not determine which one will be removed
         while (Object.keys(this.cache).length > this.cacheMaxRecords) {
-            debug("cache: removing entry",Object.keys(this.cache)[0]);
+            debug('cache: removing entry', Object.keys(this.cache)[0]);
             delete this.cache[Object.keys(this.cache)[0]];
         }
     }
@@ -190,28 +187,30 @@ class UdgerParser {
      */
     parseUa(ua, opts) {
 
-        let rua = JSON.parse(JSON.stringify(this.retUa));
-        let ruaJson = {};
+        const rua = JSON.parse(JSON.stringify(this.retUa));
+        const ruaJson = {};
 
         if (!ua) return {
             udger: rua,
             json: ruaJson
         };
 
-        let q,r,e;
+        let q;
+        let r;
+        let e;
 
         let client_id = 0;
         let client_class_id = -1;
         let os_id = 0;
         let deviceclass_id = 0;
 
-        debug("parse useragent string: START (useragent: " + ua + ")");
+        debug('parse useragent string: START (useragent: ' + ua + ')');
 
         rua['ua_string'] = ua;
         rua['ua_class'] = 'Unrecognized';
         rua['ua_class_code'] = 'unrecognized';
 
-        dotProp.set(ruaJson,'ua.string',ua);
+        dotProp.set(ruaJson, 'ua.string', ua);
         if (opts.full) {
             dotProp.set(ruaJson, 'ua.class.name', 'Unrecognized');
             dotProp.set(ruaJson, 'ua.class.code', 'unrecognized');
@@ -224,22 +223,22 @@ class UdgerParser {
         ////////////////////////////////////////////////
 
         q = this.db.prepare(
-            "SELECT " +
-            "udger_crawler_list.id as botid," +
-            "name, ver, ver_major, last_seen, respect_robotstxt," +
-            "family, family_code, family_homepage, family_icon," +
-            "vendor, vendor_code, vendor_homepage," +
-            "crawler_classification, crawler_classification_code " +
-            "FROM udger_crawler_list " +
-            "LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id " +
-            "WHERE ua_string=?"
+            'SELECT ' +
+            'udger_crawler_list.id as botid,' +
+            'name, ver, ver_major, last_seen, respect_robotstxt,' +
+            'family, family_code, family_homepage, family_icon,' +
+            'vendor, vendor_code, vendor_homepage,' +
+            'crawler_classification, crawler_classification_code ' +
+            'FROM udger_crawler_list ' +
+            'LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id ' +
+            'WHERE ua_string=?'
         );
 
         r = q.get(ua);
 
         if (r) {
 
-            debug("parse useragent string: crawler found");
+            debug('parse useragent string: crawler found');
 
             client_class_id = 99;
 
@@ -256,7 +255,7 @@ class UdgerParser {
             rua['ua_family_vendor_code'] = r['vendor_code'] || '';
             rua['ua_family_vendor_homepage'] = r['vendor_homepage'] || '';
             rua['ua_family_icon'] = r['family_icon'] || '';
-            rua['ua_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (r['family'] || '') + "#id" + (r['botid'] || '');
+            rua['ua_family_info_url'] = 'https://udger.com/resources/ua-list/bot-detail?bot=' + (r['family'] || '') + '#id' + (r['botid'] || '');
 
             rua['crawler_last_seen'] = r['last_seen'] || '';
             rua['crawler_category'] = r['crawler_classification'] || '';
@@ -267,7 +266,7 @@ class UdgerParser {
             rua['ua'] && dotProp.set(ruaJson, 'ua.name', rua['ua']);
 
             if (opts.full) {
-                dotProp.set(ruaJson,'ua.class.name','Crawler');
+                dotProp.set(ruaJson, 'ua.class.name', 'Crawler');
                 dotProp.set(ruaJson, 'ua.class.code', 'crawler');
                 rua['ua_version'] && dotProp.set(ruaJson, 'ua.version.current', rua['ua_version']);
                 rua['ua_version_major'] && dotProp.set(ruaJson, 'ua.version.major', rua['ua_version_major']);
@@ -282,10 +281,10 @@ class UdgerParser {
                 rua['ua_family'] && r['botid'] && dotProp.set(ruaJson, 'ua.family.infoUrl', rua['ua_family_info_url']);
 
             } else {
-                dotProp.set(ruaJson,'ua.class','crawler');
-                rua['ua_family_code'] && dotProp.set(ruaJson,'ua.family.code',rua['ua_family_code']);
-                rua['ua_family_homepage'] && dotProp.set(ruaJson,'ua.family.homepage',rua['ua_family_homepage']);
-                rua['ua_family_vendor_code'] && dotProp.set(ruaJson,'ua.family.vendor',rua['ua_family_vendor_code']);
+                dotProp.set(ruaJson, 'ua.class', 'crawler');
+                rua['ua_family_code'] && dotProp.set(ruaJson, 'ua.family.code', rua['ua_family_code']);
+                rua['ua_family_homepage'] && dotProp.set(ruaJson, 'ua.family.homepage', rua['ua_family_homepage']);
+                rua['ua_family_vendor_code'] && dotProp.set(ruaJson, 'ua.family.vendor', rua['ua_family_vendor_code']);
             }
 
             rua['crawler_last_seen'] && dotProp.set(ruaJson, 'crawler.lastSeen', rua['crawler_last_seen']);
@@ -300,18 +299,18 @@ class UdgerParser {
         } else {
 
             q = this.db.prepare(
-                "SELECT class_id,client_id,regstring,name,name_code,homepage,icon,icon_big,engine,vendor,vendor_code,vendor_homepage,uptodate_current_version,client_classification,client_classification_code " +
-                "FROM udger_client_regex " +
-                "JOIN udger_client_list ON udger_client_list.id=udger_client_regex.client_id " +
-                "JOIN udger_client_class ON udger_client_class.id=udger_client_list.class_id " +
-                "ORDER BY sequence ASC"
+                'SELECT class_id,client_id,regstring,name,name_code,homepage,icon,icon_big,engine,vendor,vendor_code,vendor_homepage,uptodate_current_version,client_classification,client_classification_code ' +
+                'FROM udger_client_regex ' +
+                'JOIN udger_client_list ON udger_client_list.id=udger_client_regex.client_id ' +
+                'JOIN udger_client_class ON udger_client_class.id=udger_client_list.class_id ' +
+                'ORDER BY sequence ASC'
             );
 
             for (r of q.iterate()) {
                 e = ua.match(utils.phpRegexpToJs(r['regstring']));
                 if (e) {
 
-                    debug("parse useragent string: client found");
+                    debug('parse useragent string: client found');
 
                     client_id = r['client_id'];
                     client_class_id = r['class_id'];
@@ -326,7 +325,7 @@ class UdgerParser {
                         dotProp.set(ruaJson, 'ua.class', rua['ua_class_code']);
                     }
                     if (e[1]) {
-                        rua['ua'] = r['name'] + " " + e[1];
+                        rua['ua'] = r['name'] + ' ' + e[1];
                         rua['ua_version'] = e[1];
                         rua['ua_version_major'] = e[1].split('.')[0];
                     } else {
@@ -338,7 +337,7 @@ class UdgerParser {
                     if (rua['ua']) {
                         dotProp.set(ruaJson, 'ua.name', rua['ua']);
                     } else {
-                        dotProp.delete(ruaJson,'ua.name');
+                        dotProp.delete(ruaJson, 'ua.name');
                     }
 
                     if (opts.full) {
@@ -364,7 +363,7 @@ class UdgerParser {
                     rua['ua_family_vendor_homepage'] = r['vendor_homepage'] || '';
                     rua['ua_family_icon'] = r['icon'] || '';
                     rua['ua_family_icon_big'] = r['icon_big'] || '';
-                    rua['ua_family_info_url'] = "https://udger.com/resources/ua-list/browser-detail?browser=" + (r['name'] || '');
+                    rua['ua_family_info_url'] = 'https://udger.com/resources/ua-list/browser-detail?browser=' + (r['name'] || '');
                     rua['ua_engine'] = r['engine'] || '';
 
                     if (opts.full) {
@@ -394,17 +393,17 @@ class UdgerParser {
         // os
         ////////////////////////////////////////////////
         q = this.db.prepare(
-            "SELECT os_id,regstring,family,family_code,name,name_code,homepage,icon,icon_big,vendor,vendor_code,vendor_homepage " +
-            "FROM udger_os_regex " +
-            "JOIN udger_os_list ON udger_os_list.id=udger_os_regex.os_id " +
-            "ORDER BY sequence ASC"
+            'SELECT os_id,regstring,family,family_code,name,name_code,homepage,icon,icon_big,vendor,vendor_code,vendor_homepage ' +
+            'FROM udger_os_regex ' +
+            'JOIN udger_os_list ON udger_os_list.id=udger_os_regex.os_id ' +
+            'ORDER BY sequence ASC'
         );
 
         for (r of q.iterate()) {
             e = ua.match(utils.phpRegexpToJs(r['regstring']));
             if (e) {
 
-                debug("parse useragent string: os found");
+                debug('parse useragent string: os found');
 
                 os_id = r['os_id'];
                 rua['os'] = r['name'] || '';
@@ -412,7 +411,7 @@ class UdgerParser {
                 rua['os_homepage'] = r['homepage'] || '';
                 rua['os_icon'] = r['icon'] || '';
                 rua['os_icon_big'] = r['icon_big'] || '';
-                rua['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (r['name'] || '');
+                rua['os_info_url'] = 'https://udger.com/resources/ua-list/os-detail?os=' + (r['name'] || '');
                 rua['os_family'] = r['family'] || '';
                 rua['os_family_code'] = r['family_code'] || '';
                 rua['os_family_vendor'] = r['vendor'] || '';
@@ -446,17 +445,17 @@ class UdgerParser {
         if (os_id == 0 && client_id != 0) {
 
             q = this.db.prepare(
-                "SELECT os_id,family,family_code,name,name_code,homepage,icon,icon_big,vendor,vendor_code,vendor_homepage " +
-                "FROM udger_client_os_relation " +
-                "JOIN udger_os_list ON udger_os_list.id=udger_client_os_relation.os_id " +
-                "WHERE client_id=?"
+                'SELECT os_id,family,family_code,name,name_code,homepage,icon,icon_big,vendor,vendor_code,vendor_homepage ' +
+                'FROM udger_client_os_relation ' +
+                'JOIN udger_os_list ON udger_os_list.id=udger_client_os_relation.os_id ' +
+                'WHERE client_id=?'
             );
 
             r = q.get(client_id);
 
             if (r) {
 
-                debug("parse useragent string: client os relation found");
+                debug('parse useragent string: client os relation found');
 
                 os_id = r['os_id'];
                 rua['os'] = r['name'] || '';
@@ -464,7 +463,7 @@ class UdgerParser {
                 rua['os_homepage'] = r['homepage'] || '';
                 rua['os_icon'] = r['icon'] || '';
                 rua['os_icon_big'] = r['icon_big'] || '';
-                rua['os_info_url'] = "https://udger.com/resources/ua-list/os-detail?os=" + (r['name'] || '');
+                rua['os_info_url'] = 'https://udger.com/resources/ua-list/os-detail?os=' + (r['name'] || '');
                 rua['os_family'] = r['family'] || '';
                 rua['os_family_code'] = r['family_code'] || '';
                 rua['os_family_vendor'] = r['vendor'] || '';
@@ -491,24 +490,24 @@ class UdgerParser {
         ////////////////////////////////////////////////
 
         q = this.db.prepare(
-            "SELECT deviceclass_id,regstring,name,name_code,icon,icon_big " +
-            "FROM udger_deviceclass_regex " +
-            "JOIN udger_deviceclass_list ON udger_deviceclass_list.id=udger_deviceclass_regex.deviceclass_id " +
-            "ORDER BY sequence ASC"
+            'SELECT deviceclass_id,regstring,name,name_code,icon,icon_big ' +
+            'FROM udger_deviceclass_regex ' +
+            'JOIN udger_deviceclass_list ON udger_deviceclass_list.id=udger_deviceclass_regex.deviceclass_id ' +
+            'ORDER BY sequence ASC'
         );
 
         for (r of q.iterate()) {
             e = ua.match(utils.phpRegexpToJs(r['regstring']));
             if (e) {
 
-                debug("parse useragent string: device found by regex");
+                debug('parse useragent string: device found by regex');
 
                 deviceclass_id = r['deviceclass_id'];
                 rua['device_class'] = r['name'] || '';
                 rua['device_class_code'] = r['name_code'] || '';
                 rua['device_class_icon'] = r['icon'] || '';
                 rua['device_class_icon_big'] = r['icon_big'] || '';
-                rua['device_class_info_url'] = "https://udger.com/resources/ua-list/device-detail?device=" + r['name'];
+                rua['device_class_info_url'] = 'https://udger.com/resources/ua-list/device-detail?device=' + r['name'];
 
                 if (opts.full) {
                     rua['device_class'] && dotProp.set(ruaJson, 'device.class.name', rua['device_class']);
@@ -526,24 +525,24 @@ class UdgerParser {
 
         if (deviceclass_id == 0 && client_class_id != -1) {
             q = this.db.prepare(
-                "SELECT deviceclass_id,name,name_code,icon,icon_big " +
-                "FROM udger_deviceclass_list " +
-                "JOIN udger_client_class ON udger_client_class.deviceclass_id=udger_deviceclass_list.id " +
-                "WHERE udger_client_class.id=?"
+                'SELECT deviceclass_id,name,name_code,icon,icon_big ' +
+                'FROM udger_deviceclass_list ' +
+                'JOIN udger_client_class ON udger_client_class.deviceclass_id=udger_deviceclass_list.id ' +
+                'WHERE udger_client_class.id=?'
             );
 
             r = q.get(client_class_id);
 
             if (r) {
 
-                debug("parse useragent string: device found by deviceclass");
+                debug('parse useragent string: device found by deviceclass');
 
                 deviceclass_id = r['deviceclass_id'];
                 rua['device_class'] = r['name'] || '';
                 rua['device_class_code'] = r['name_code'] || '';
                 rua['device_class_icon'] = r['icon'] || '';
                 rua['device_class_icon_big'] = r['icon_big'] || '';
-                rua['device_class_info_url'] = "https://udger.com/resources/ua-list/device-detail?device=" + (r['name'] || '');
+                rua['device_class_info_url'] = 'https://udger.com/resources/ua-list/device-detail?device=' + (r['name'] || '');
 
                 if (opts.full) {
                     rua['device_class'] && dotProp.set(ruaJson, 'device.class.name', rua['device_class']);
@@ -563,15 +562,15 @@ class UdgerParser {
 
         if (rua['os_family_code']) {
             q = this.db.prepare(
-                "SELECT id,regstring FROM udger_devicename_regex " +
-                "WHERE (" +
-                "(os_family_code=? AND os_code='-all-') OR " +
-                "(os_family_code=? AND os_code=?)" +
-                ") " +
-                "ORDER BY sequence"
+                'SELECT id,regstring FROM udger_devicename_regex ' +
+                'WHERE (' +
+                '(os_family_code=? AND os_code=\'-all-\') OR ' +
+                '(os_family_code=? AND os_code=?)' +
+                ') ' +
+                'ORDER BY sequence'
             );
 
-            let bindParams = [
+            const bindParams = [
                 rua['os_family_code'],
                 rua['os_family_code'],
                 rua['os_code']
@@ -579,27 +578,27 @@ class UdgerParser {
 
             let match;
             let rId;
-            for (let r of q.iterate(bindParams)) {
+            for (const r of q.iterate(bindParams)) {
                 e = ua.match(utils.phpRegexpToJs(r['regstring']));
                 if (e && e[1]) {
                     match = e[1].trim();
-                    rId = r["id"];
+                    rId = r['id'];
                     break;
                 }
             }
 
-            let qC = this.db.prepare(
-                "SELECT marketname,brand_code,brand,brand_url,icon,icon_big " +
-                "FROM udger_devicename_list " +
-                "JOIN udger_devicename_brand ON udger_devicename_brand.id=udger_devicename_list.brand_id " +
-                "WHERE regex_id=? AND code=?"
+            const qC = this.db.prepare(
+                'SELECT marketname,brand_code,brand,brand_url,icon,icon_big ' +
+                'FROM udger_devicename_list ' +
+                'JOIN udger_devicename_brand ON udger_devicename_brand.id=udger_devicename_list.brand_id ' +
+                'WHERE regex_id=? AND code=?'
             );
 
-            let rC = qC.get(rId, match);
+            const rC = qC.get(rId, match);
 
             if (rC) {
 
-                debug("parse useragent string: device marketname found");
+                debug('parse useragent string: device marketname found');
 
                 rua['device_marketname'] = rC['marketname'] || '';
                 rua['device_brand'] = rC['brand'] || '';
@@ -607,7 +606,7 @@ class UdgerParser {
                 rua['device_brand_homepage'] = rC['brand_url'] || '';
                 rua['device_brand_icon'] = rC['icon'] || '';
                 rua['device_brand_icon_big'] = rC['icon_big'] || '';
-                rua['device_brand_info_url'] = "https://udger.com/resources/ua-list/devices-brand-detail?brand=" + (rC['brand_code'] || '');
+                rua['device_brand_info_url'] = 'https://udger.com/resources/ua-list/devices-brand-detail?brand=' + (rC['brand_code'] || '');
 
                 rua['device_marketname'] && dotProp.set(ruaJson, 'device.marketName', rua['device_marketname']);
                 rua['device_brand'] && dotProp.set(ruaJson, 'device.brand.name', rua['device_brand']);
@@ -620,7 +619,7 @@ class UdgerParser {
             }
         }
 
-        debug("parse useragent string: END, unset useragent string");
+        debug('parse useragent string: END, unset useragent string');
 
         return {
             udger:rua,
@@ -634,8 +633,8 @@ class UdgerParser {
      */
     parseIp(ip, opts) {
 
-        let rip = JSON.parse(JSON.stringify(this.retIp));
-        let ripJson = {};
+        const rip = JSON.parse(JSON.stringify(this.retIp));
+        const ripJson = {};
 
         if (!ip) return {
             udger:rip,
@@ -643,22 +642,22 @@ class UdgerParser {
         };
 
 
-        let q,r;
+        let q;
+        let r;
         let ipInt;
         let ipa;
-        let ipver;
 
-        debug("parse IP address: START (IP: " + ip + ")");
+        debug('parse IP address: START (IP: ' + ip + ')');
 
         rip['ip'] = ip;
         dotProp.set(ripJson, 'ip', ip);
 
-        ipver = utils.getIpVersion(ip);
+        const ipver = utils.getIpVersion(ip);
 
         if (ipver === 4 || ipver === 6) {
             if (ipver === 6) {
                 ip = utils.inetNtop(utils.inetPton(ip));
-                debug("compress IP address is:" + ip);
+                debug('compress IP address is:' + ip);
             }
         }
 
@@ -668,15 +667,15 @@ class UdgerParser {
         }
 
         q = this.db.prepare(
-            "SELECT udger_crawler_list.id as botid, ip_last_seen, ip_hostname, ip_country, ip_city, " +
-            "ip_country_code, ip_classification, ip_classification_code, name, ver, ver_major, last_seen, "+
-            "respect_robotstxt, family, family_code, family_homepage, family_icon, vendor, vendor_code, "+
-            "vendor_homepage, crawler_classification, crawler_classification_code "+
-            "FROM udger_ip_list "+
-            "JOIN udger_ip_class ON udger_ip_class.id=udger_ip_list.class_id "+
-            "LEFT JOIN udger_crawler_list ON udger_crawler_list.id=udger_ip_list.crawler_id "+
-            "LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id "+
-            "WHERE ip=? ORDER BY sequence"
+            'SELECT udger_crawler_list.id as botid, ip_last_seen, ip_hostname, ip_country, ip_city, ' +
+            'ip_country_code, ip_classification, ip_classification_code, name, ver, ver_major, last_seen, '+
+            'respect_robotstxt, family, family_code, family_homepage, family_icon, vendor, vendor_code, '+
+            'vendor_homepage, crawler_classification, crawler_classification_code '+
+            'FROM udger_ip_list '+
+            'JOIN udger_ip_class ON udger_ip_class.id=udger_ip_list.class_id '+
+            'LEFT JOIN udger_crawler_list ON udger_crawler_list.id=udger_ip_list.crawler_id '+
+            'LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id '+
+            'WHERE ip=? ORDER BY sequence'
         );
 
         r = q.get(ip);
@@ -703,7 +702,7 @@ class UdgerParser {
             rip['crawler_family_vendor_homepage'] = r['vendor_homepage'] || '';
             rip['crawler_family_icon'] = r['family_icon'] || '';
             if (r['ip_classification_code'] === 'crawler') {
-                rip['crawler_family_info_url'] = "https://udger.com/resources/ua-list/bot-detail?bot=" + (r['family'] || '') + "#id" + (r['botid']|| '');
+                rip['crawler_family_info_url'] = 'https://udger.com/resources/ua-list/bot-detail?bot=' + (r['family'] || '') + '#id' + (r['botid']|| '');
             }
             rip['crawler_last_seen'] = r['last_seen'] || '';
             rip['crawler_category'] = r['crawler_classification'] || '';
@@ -767,10 +766,10 @@ class UdgerParser {
             ipInt = ipa.bigInteger().intValue();
 
             q = this.db.prepare(
-                "SELECT name, name_code, homepage "+
-                "FROM udger_datacenter_range "+
-                "JOIN udger_datacenter_list ON udger_datacenter_range.datacenter_id=udger_datacenter_list.id "+
-                "WHERE iplong_from <=?  AND iplong_to >=?"
+                'SELECT name, name_code, homepage '+
+                'FROM udger_datacenter_range '+
+                'JOIN udger_datacenter_list ON udger_datacenter_range.datacenter_id=udger_datacenter_list.id '+
+                'WHERE iplong_from <=?  AND iplong_to >=?'
             );
 
             r = q.get(ipInt, ipInt);
@@ -794,25 +793,25 @@ class UdgerParser {
         } else if (ipver === 6) {
 
             ipa = new Address6(ip);
-            let t = ipa.canonicalForm().split(':');
-            let ipInts = {};
-            t.forEach((h,i) => {
+            const t = ipa.canonicalForm().split(':');
+            const ipInts = {};
+            t.forEach((h, i) => {
                 ipInts['ipInt'+i] = parseInt(h, 16);
             });
 
             q = this.db.prepare(
-                "SELECT name, name_code, homepage "+
-                "FROM udger_datacenter_range6 "+
-                "JOIN udger_datacenter_list ON udger_datacenter_range6.datacenter_id=udger_datacenter_list.id "+
-                "WHERE "+
-                "iplong_from0 <= @ipInt0 AND iplong_to0 >= @ipInt0 AND "+
-                "iplong_from1 <= @ipInt1 AND iplong_to1 >= @ipInt1 AND "+
-                "iplong_from2 <= @ipInt2 AND iplong_to2 >= @ipInt2 AND "+
-                "iplong_from3 <= @ipInt3 AND iplong_to3 >= @ipInt3 AND "+
-                "iplong_from4 <= @ipInt4 AND iplong_to4 >= @ipInt4 AND "+
-                "iplong_from5 <= @ipInt5 AND iplong_to5 >= @ipInt5 AND "+
-                "iplong_from6 <= @ipInt6 AND iplong_to6 >= @ipInt6 AND "+
-                "iplong_from7 <= @ipInt7 AND iplong_to7 >= @ipInt7"
+                'SELECT name, name_code, homepage '+
+                'FROM udger_datacenter_range6 '+
+                'JOIN udger_datacenter_list ON udger_datacenter_range6.datacenter_id=udger_datacenter_list.id '+
+                'WHERE '+
+                'iplong_from0 <= @ipInt0 AND iplong_to0 >= @ipInt0 AND '+
+                'iplong_from1 <= @ipInt1 AND iplong_to1 >= @ipInt1 AND '+
+                'iplong_from2 <= @ipInt2 AND iplong_to2 >= @ipInt2 AND '+
+                'iplong_from3 <= @ipInt3 AND iplong_to3 >= @ipInt3 AND '+
+                'iplong_from4 <= @ipInt4 AND iplong_to4 >= @ipInt4 AND '+
+                'iplong_from5 <= @ipInt5 AND iplong_to5 >= @ipInt5 AND '+
+                'iplong_from6 <= @ipInt6 AND iplong_to6 >= @ipInt6 AND '+
+                'iplong_from7 <= @ipInt7 AND iplong_to7 >= @ipInt7'
             );
 
             r = q.get(ipInts);
@@ -834,7 +833,7 @@ class UdgerParser {
 
         }
 
-        debug("parse IP address: END");
+        debug('parse IP address: END');
 
         return {
             udger:rip,
@@ -857,7 +856,7 @@ class UdgerParser {
             return this.cacheRead(this.keyCache, opts);
         }
 
-        let ret = {};
+        const ret = {};
         if (!opts) opts = {};
 
         if (opts.json) {
@@ -879,7 +878,7 @@ class UdgerParser {
 
     randomSanityChecks(max, callback) {
         if (!this.db) {
-            callback(new Error("Database not ready"));
+            callback(new Error('Database not ready'));
             return false;
         }
 
@@ -888,7 +887,7 @@ class UdgerParser {
             return false;
         }
 
-        if (typeof max!= "number") {
+        if (typeof max!= 'number') {
             callback(new Error('Maximum number of records is not a number'));
             return false;
         }
@@ -900,8 +899,8 @@ class UdgerParser {
 
         if (!this.randomSanityChecks(max, callback)) return;
 
-        let q = this.db.prepare(
-            "SELECT ua_string FROM udger_crawler_list ORDER BY RANDOM() LIMIT ?"
+        const q = this.db.prepare(
+            'SELECT ua_string FROM udger_crawler_list ORDER BY RANDOM() LIMIT ?'
         );
 
         callback(null, q.all(max));
@@ -911,8 +910,8 @@ class UdgerParser {
     randomUAClientsRegex(max, callback) {
         if (!this.randomSanityChecks(max, callback)) return;
 
-        let q = this.db.prepare(
-            "SELECT regstring FROM udger_client_regex ORDER BY RANDOM() LIMIT ?"
+        const q = this.db.prepare(
+            'SELECT regstring FROM udger_client_regex ORDER BY RANDOM() LIMIT ?'
         );
 
         callback(null, q.all(max));
@@ -930,8 +929,8 @@ class UdgerParser {
             let reClean;
             for (let i = 0, len=results.length; i<len; i++) {
                 regex = new RegExp(results[i].regstring);
-                regexClean = results[i].regstring.replace(/^\//,'');
-                regexClean = regexClean.replace(/\/si$/,'');
+                regexClean = results[i].regstring.replace(/^\//, '');
+                regexClean = regexClean.replace(/\/si$/, '');
                 reClean = new RegExp(regexClean);
                 re = new RandExp(reClean);
 
@@ -958,14 +957,14 @@ class UdgerParser {
             }
 
             callback(null, results);
-        })
+        });
     }
 
     randomIPv4(max, callback) {
         if (!this.randomSanityChecks(max, callback)) return;
 
-        let q = this.db.prepare(
-            "SELECT ip FROM udger_ip_list WHERE ip LIKE '%.%.%.%' ORDER BY RANDOM() LIMIT ?"
+        const q = this.db.prepare(
+            'SELECT ip FROM udger_ip_list WHERE ip LIKE \'%.%.%.%\' ORDER BY RANDOM() LIMIT ?'
         );
 
         callback(null, q.all(max));
@@ -974,13 +973,13 @@ class UdgerParser {
 
     getUAClientsClassification(callback) {
         if (!this.db) {
-            callback(new Error("Database not ready"));
+            callback(new Error('Database not ready'));
             return false;
         }
 
-        let q = this.db.prepare(
-            "SELECT client_classification, client_classification_code FROM udger_client_class"
-        )
+        const q = this.db.prepare(
+            'SELECT client_classification, client_classification_code FROM udger_client_class'
+        );
 
         callback(null, q.all());
         return;
@@ -988,13 +987,13 @@ class UdgerParser {
 
     getUACrawlersClassification(callback) {
         if (!this.db) {
-            callback(new Error("Database not ready"));
+            callback(new Error('Database not ready'));
             return false;
         }
 
-        let q = this.db.prepare(
-            "SELECT crawler_classification, crawler_classification_code FROM udger_crawler_class"
-        )
+        const q = this.db.prepare(
+            'SELECT crawler_classification, crawler_classification_code FROM udger_crawler_class'
+        );
 
         callback(null, q.all());
         return;
@@ -1002,11 +1001,11 @@ class UdgerParser {
 
     getUACrawlersFamilies(callback) {
         if (!this.db) {
-            callback(new Error("Database not ready"));
+            callback(new Error('Database not ready'));
             return false;
         }
 
-        let q = this.db.prepare(
+        const q = this.db.prepare(
             'SELECT DISTINCT '+
             'udger_crawler_list.family_code,'+
             'udger_crawler_class.crawler_classification_code '+
@@ -1014,7 +1013,7 @@ class UdgerParser {
             'LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id '+
             'WHERE family_code != "" '+
             'ORDER BY family_code, crawler_classification_code'
-        )
+        );
 
         callback(null, q.all());
         return;
@@ -1022,15 +1021,15 @@ class UdgerParser {
 
     getDatabaseInfo(callback) {
         if (!this.db) {
-            callback(new Error("Database not ready"));
+            callback(new Error('Database not ready'));
             return false;
         }
 
-        let q = this.db.prepare(
-            "SELECT * FROM udger_db_info"
-        )
+        const q = this.db.prepare(
+            'SELECT * FROM udger_db_info'
+        );
 
-        let result = q.get();
+        const result = q.get();
         delete result.key;
 
         callback(null, result);
@@ -1039,13 +1038,13 @@ class UdgerParser {
 
     getIPsClassification(callback) {
         if (!this.db) {
-            callback(new Error("Database not ready"));
+            callback(new Error('Database not ready'));
             return false;
         }
 
-        let q = this.db.prepare(
-            "SELECT ip_classification, ip_classification_code FROM udger_ip_class"
-        )
+        const q = this.db.prepare(
+            'SELECT ip_classification, ip_classification_code FROM udger_ip_class'
+        );
 
         callback(null, q.all());
         return;
