@@ -6,11 +6,10 @@ tap.test(
     (t) => {
         t.throw(
             ()=> {
-                config.udgerParser.set({foo:'bar'});
+                config.udgerParser.set({ foo:'bar' });
             },
             {}
         );
         t.end();
     }
 );
-

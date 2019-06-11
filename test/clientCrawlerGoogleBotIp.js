@@ -1,10 +1,10 @@
 const tap = require('tap');
 const config = require('./lib/config');
 
-let defaultResult = config.defaultResult;
+const defaultResult = config.defaultResult;
 
-let myUa = 'Googlebot/2.1 (+http://www.google.com/bot.html)';
-let myIp = '66.249.64.73';
+const myUa = 'Googlebot/2.1 (+http://www.google.com/bot.html)';
+const myIp = '66.249.64.73';
 
 let expected = {
     'user_agent': {
@@ -69,10 +69,9 @@ expected = config.merge(defaultResult, expected);
 tap.test(
     'User Agent: GoogleBot should be recognized',
     (t) => {
-        config.udgerParser.set({ua:myUa, ip:myIp});
-        let ret = config.udgerParser.parse();
+        config.udgerParser.set({ ua:myUa, ip:myIp });
+        const ret = config.udgerParser.parse();
         t.same(ret, expected);
         t.end();
     }
 );
-
