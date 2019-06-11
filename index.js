@@ -762,8 +762,7 @@ class UdgerParser {
 
         if (ipver === 4) {
 
-            ipa = new Address4(ip);
-            ipInt = ipa.bigInteger().intValue();
+            ipInt = utils.ip2long(ip);
 
             q = this.db.prepare(
                 'SELECT name, name_code, homepage '+
