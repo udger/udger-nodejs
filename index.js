@@ -1010,8 +1010,8 @@ class UdgerParser {
             'udger_crawler_class.crawler_classification_code '+
             'FROM udger_crawler_list '+
             'LEFT JOIN udger_crawler_class ON udger_crawler_class.id=udger_crawler_list.class_id '+
-            'WHERE family_code != "" '+
-            'ORDER BY family_code, crawler_classification_code'
+            'WHERE udger_crawler_list.family_code != "" '+
+            'ORDER BY udger_crawler_list.family_code, udger_crawler_list.crawler_classification_code'
         );
 
         callback(null, q.all());
