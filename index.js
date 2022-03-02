@@ -1,7 +1,6 @@
 const Database = require('better-sqlite3');
 const debug = require('debug')('udger-nodejs');
 const Address6 = require('ip-address').Address6;
-const Address4 = require('ip-address').Address4;
 const utils = require('./utils');
 const fs = require('fs-extra');
 const dotProp = require('dot-prop');
@@ -38,6 +37,10 @@ class UdgerParser {
     connect() {
         if (!this.db) {
             this.db = new Database(this.file, { readonly: true, fileMustExist: true });
+
+            // see https://www.sqlite.org/wal.html
+            this.db.pragma('journal_mode = WAL');
+
             return true;
         }
         return false;
@@ -921,13 +924,11 @@ class UdgerParser {
 
         if (!this.randomSanityChecks(max, callback)) return;
         this.randomUAClientsRegex(max, (err, results) => {
-            let regex;
             let regexClean;
             let randomUA;
             let re;
             let reClean;
             for (let i = 0, len=results.length; i<len; i++) {
-                regex = new RegExp(results[i].regstring);
                 regexClean = results[i].regstring.replace(/^\//, '');
                 regexClean = regexClean.replace(/\/si$/, '');
                 reClean = new RegExp(regexClean);
