@@ -4,7 +4,7 @@ const config = require('./lib/config');
 tap.test(
     'set: should failed because string passed',
     (t) => {
-        t.throw(
+        t.throws(
             ()=> {
                 config.udgerParser.set('myString');
             },
