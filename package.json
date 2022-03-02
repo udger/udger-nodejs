@@ -36,15 +36,15 @@
   "homepage": "https://github.com/udger/udger-nodejs#readme",
   "devDependencies": {
     "connect": "3.7.0",
-    "merge-deep": "3.0.2",
-    "tap": "14.10.8"
+    "merge-deep": "3.0.3",
+    "tap": "15.1.6"
   },
   "dependencies": {
-    "better-sqlite3": "7.1.0",
+    "better-sqlite3": "7.5.0",
     "dot-prop": "5.2.0",
-    "fs-extra": "9.0.1",
-    "ip-address": "6.3.0",
-    "node-gyp": "7.1.0",
+    "fs-extra": "10.0.1",
+    "ip-address": "8.1.0",
+    "node-gyp": "9.0.0",
     "randexp": "0.5.3"
   }
 }
