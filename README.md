@@ -1,6 +1,5 @@
 # udger-nodejs
 [![Build Status](https://travis-ci.org/udger/udger-nodejs.svg?branch=master)](https://travis-ci.org/udger/udger-nodejs)
-[![Dependencies](https://david-dm.org/udger/udger-nodejs.svg)](https://david-dm.org/udger/udger-nodejs)
 
 # Udger client for NodeJS (data ver. 3)
 Local parser is very fast and accurate useragent string detection solution.
@@ -281,7 +280,7 @@ By default, cache is disable. To enable cache, just add this line BEFORE using u
     // by default, cache size is 4000 keys (a key can be an UA, or UA+IP)
     // you can modify this limit
     udgerParser.setCacheSize(1000);
-    udgerParser.setCacheEnable()
+    udgerParser.setCacheEnable(true)
 
 When a record is coming from the cache, the "from_cache" attribute in the response is "true"
 
