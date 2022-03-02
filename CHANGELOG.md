@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.4.0](https://github.com/udger/udger-nodejs/compare/v1.4.0...v1.3.7) - 2022-03-02
+### Changed
+* packages update and code changed
+* fix #44
+* fix #45
+
+## [1.3.8](https://github.com/udger/udger-nodejs/compare/v1.3.8...v1.3.7) - 2020-09-31
+### Changed
+* packages update
+
 ## [1.3.7](https://github.com/udger/udger-nodejs/compare/v1.3.7...v1.3.6) - 2019-06-11
 ### Changed
 * packages update
