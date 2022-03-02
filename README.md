@@ -1,5 +1,4 @@
 # udger-nodejs
-[![Build Status](https://travis-ci.org/udger/udger-nodejs.svg?branch=master)](https://travis-ci.org/udger/udger-nodejs)
 
 # Udger client for NodeJS (data ver. 3)
 Local parser is very fast and accurate useragent string detection solution.
