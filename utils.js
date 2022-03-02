@@ -10,11 +10,23 @@ function phpRegexpToJs(str) {
 }
 
 function getIpVersion(ip) {
-    let addr = new Address6(ip);
-    if (addr.isValid()) return 6;
 
-    addr = new Address4(ip);
-    if (addr.isValid()) return 4;
+    let addr;
+    try {
+        addr = new Address6(ip);
+    } catch(e) {
+        //
+    }
+
+    if (addr) return 6;
+
+    try {
+        addr = new Address4(ip);
+    } catch(e) {
+        //
+    }
+
+    if (addr) return 4;
 
     return false;
 }
