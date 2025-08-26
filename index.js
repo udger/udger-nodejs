@@ -213,12 +213,12 @@ class UdgerParser {
         rua['ua_class'] = 'Unrecognized';
         rua['ua_class_code'] = 'unrecognized';
 
-        dotProp.set(ruaJson, 'ua.string', ua);
+        dotProp.setProperty(ruaJson, 'ua.string', ua);
         if (opts.full) {
-            dotProp.set(ruaJson, 'ua.class.name', 'Unrecognized');
-            dotProp.set(ruaJson, 'ua.class.code', 'unrecognized');
+            dotProp.setProperty(ruaJson, 'ua.class.name', 'Unrecognized');
+            dotProp.setProperty(ruaJson, 'ua.class.code', 'unrecognized');
         } else {
-            dotProp.set(ruaJson, 'ua.class', 'unrecognized');
+            dotProp.setProperty(ruaJson, 'ua.class', 'unrecognized');
         }
 
         ////////////////////////////////////////////////
@@ -266,38 +266,38 @@ class UdgerParser {
             rua['crawler_respect_robotstxt'] = r['respect_robotstxt'] || '';
 
             // JSON FORMAT
-            rua['ua'] && dotProp.set(ruaJson, 'ua.name', rua['ua']);
+            rua['ua'] && dotProp.setProperty(ruaJson, 'ua.name', rua['ua']);
 
             if (opts.full) {
-                dotProp.set(ruaJson, 'ua.class.name', 'Crawler');
-                dotProp.set(ruaJson, 'ua.class.code', 'crawler');
-                rua['ua_version'] && dotProp.set(ruaJson, 'ua.version.current', rua['ua_version']);
-                rua['ua_version_major'] && dotProp.set(ruaJson, 'ua.version.major', rua['ua_version_major']);
+                dotProp.setProperty(ruaJson, 'ua.class.name', 'Crawler');
+                dotProp.setProperty(ruaJson, 'ua.class.code', 'crawler');
+                rua['ua_version'] && dotProp.setProperty(ruaJson, 'ua.version.current', rua['ua_version']);
+                rua['ua_version_major'] && dotProp.setProperty(ruaJson, 'ua.version.major', rua['ua_version_major']);
 
-                rua['ua_family'] && dotProp.set(ruaJson, 'ua.family.name', rua['ua_family']);
-                rua['ua_family_code'] && dotProp.set(ruaJson, 'ua.family.code', rua['ua_family_code']);
-                rua['ua_family_homepage'] && dotProp.set(ruaJson, 'ua.family.homepage', rua['ua_family_homepage']);
-                rua['ua_family_vendor'] && dotProp.set(ruaJson, 'ua.family.vendor.name', rua['ua_family_vendor']);
-                rua['ua_family_vendor_code'] && dotProp.set(ruaJson, 'ua.family.vendor.code', rua['ua_family_vendor_code']);
-                rua['ua_family_homepage'] && dotProp.set(ruaJson, 'ua.family.vendor.homepage', rua['ua_family_homepage']);
-                rua['ua_family_icon'] && dotProp.set(ruaJson, 'ua.family.icon', rua['ua_family_icon']);
-                rua['ua_family'] && r['botid'] && dotProp.set(ruaJson, 'ua.family.infoUrl', rua['ua_family_info_url']);
+                rua['ua_family'] && dotProp.setProperty(ruaJson, 'ua.family.name', rua['ua_family']);
+                rua['ua_family_code'] && dotProp.setProperty(ruaJson, 'ua.family.code', rua['ua_family_code']);
+                rua['ua_family_homepage'] && dotProp.setProperty(ruaJson, 'ua.family.homepage', rua['ua_family_homepage']);
+                rua['ua_family_vendor'] && dotProp.setProperty(ruaJson, 'ua.family.vendor.name', rua['ua_family_vendor']);
+                rua['ua_family_vendor_code'] && dotProp.setProperty(ruaJson, 'ua.family.vendor.code', rua['ua_family_vendor_code']);
+                rua['ua_family_homepage'] && dotProp.setProperty(ruaJson, 'ua.family.vendor.homepage', rua['ua_family_homepage']);
+                rua['ua_family_icon'] && dotProp.setProperty(ruaJson, 'ua.family.icon', rua['ua_family_icon']);
+                rua['ua_family'] && r['botid'] && dotProp.setProperty(ruaJson, 'ua.family.infoUrl', rua['ua_family_info_url']);
 
             } else {
-                dotProp.set(ruaJson, 'ua.class', 'crawler');
-                rua['ua_family_code'] && dotProp.set(ruaJson, 'ua.family.code', rua['ua_family_code']);
-                rua['ua_family_homepage'] && dotProp.set(ruaJson, 'ua.family.homepage', rua['ua_family_homepage']);
-                rua['ua_family_vendor_code'] && dotProp.set(ruaJson, 'ua.family.vendor', rua['ua_family_vendor_code']);
+                dotProp.setProperty(ruaJson, 'ua.class', 'crawler');
+                rua['ua_family_code'] && dotProp.setProperty(ruaJson, 'ua.family.code', rua['ua_family_code']);
+                rua['ua_family_homepage'] && dotProp.setProperty(ruaJson, 'ua.family.homepage', rua['ua_family_homepage']);
+                rua['ua_family_vendor_code'] && dotProp.setProperty(ruaJson, 'ua.family.vendor', rua['ua_family_vendor_code']);
             }
 
-            rua['crawler_last_seen'] && dotProp.set(ruaJson, 'crawler.lastSeen', rua['crawler_last_seen']);
+            rua['crawler_last_seen'] && dotProp.setProperty(ruaJson, 'crawler.lastSeen', rua['crawler_last_seen']);
 
             if (opts.full) {
-                rua['crawler_category'] && dotProp.set(ruaJson, 'crawler.category.name', rua['crawler_category']);
-                rua['crawler_category_code'] && dotProp.set(ruaJson, 'crawler.category.code', rua['crawler_category_code']);
-                rua['crawler_respect_robotstxt'] && dotProp.set(ruaJson, 'crawler.respectRobotsTxt', rua['crawler_respect_robotstxt']);
+                rua['crawler_category'] && dotProp.setProperty(ruaJson, 'crawler.category.name', rua['crawler_category']);
+                rua['crawler_category_code'] && dotProp.setProperty(ruaJson, 'crawler.category.code', rua['crawler_category_code']);
+                rua['crawler_respect_robotstxt'] && dotProp.setProperty(ruaJson, 'crawler.respectRobotsTxt', rua['crawler_respect_robotstxt']);
             } else {
-                rua['crawler_category_code'] && dotProp.set(ruaJson, 'crawler.category', rua['crawler_category_code']);
+                rua['crawler_category_code'] && dotProp.setProperty(ruaJson, 'crawler.category', rua['crawler_category_code']);
             }
         } else {
 
@@ -322,10 +322,10 @@ class UdgerParser {
                     rua['ua_class_code'] = r['client_classification_code'];
 
                     if (opts.full) {
-                        dotProp.set(ruaJson, 'ua.class.name', rua['ua_class']);
-                        dotProp.set(ruaJson, 'ua.class.code', rua['ua_class_code']);
+                        dotProp.setProperty(ruaJson, 'ua.class.name', rua['ua_class']);
+                        dotProp.setProperty(ruaJson, 'ua.class.code', rua['ua_class_code']);
                     } else {
-                        dotProp.set(ruaJson, 'ua.class', rua['ua_class_code']);
+                        dotProp.setProperty(ruaJson, 'ua.class', rua['ua_class_code']);
                     }
                     if (e[1]) {
                         rua['ua'] = r['name'] + ' ' + e[1];
@@ -338,20 +338,20 @@ class UdgerParser {
                     }
 
                     if (rua['ua']) {
-                        dotProp.set(ruaJson, 'ua.name', rua['ua']);
+                        dotProp.setProperty(ruaJson, 'ua.name', rua['ua']);
                     } else {
                         dotProp.delete(ruaJson, 'ua.name');
                     }
 
                     if (opts.full) {
                         if (rua['ua_version']) {
-                            dotProp.set(ruaJson, 'ua.version.current', rua['ua_version']);
+                            dotProp.setProperty(ruaJson, 'ua.version.current', rua['ua_version']);
                         } else {
                             dotProp.delete(ruaJson, 'ua.version.current');
                         }
 
                         if (rua['ua_version_major']) {
-                            dotProp.set(ruaJson, 'ua.version.current', rua['ua_version_major']);
+                            dotProp.setProperty(ruaJson, 'ua.version.current', rua['ua_version_major']);
                         } else {
                             dotProp.delete(ruaJson, 'ua.version.current');
                         }
@@ -370,22 +370,22 @@ class UdgerParser {
                     rua['ua_engine'] = r['engine'] || '';
 
                     if (opts.full) {
-                        rua['ua_uptodate_current_version'] && dotProp.set(ruaJson, 'ua.uptodateCurrentVersion', rua['ua_uptodate_current_version']);
-                        rua['ua_family'] && dotProp.set(ruaJson, 'ua.family.name', rua['ua_family']);
-                        rua['ua_family_code'] && dotProp.set(ruaJson, 'ua.family.code', rua['ua_family_code']);
-                        rua['ua_family_homepage'] && dotProp.set(ruaJson, 'ua.family.homepage', rua['ua_family_homepage']);
-                        rua['ua_family_vendor'] && dotProp.set(ruaJson, 'ua.family.vendor.name', rua['ua_family_vendor']);
-                        rua['ua_family_vendor_code'] && dotProp.set(ruaJson, 'ua.family.vendor.code', rua['ua_family_vendor_code']);
-                        rua['ua_family_vendor_homepage'] && dotProp.set(ruaJson, 'ua.family.vendor.homepage', rua['ua_family_vendor_homepage']);
-                        rua['ua_family_icon'] && dotProp.set(ruaJson, 'ua.family.icon', rua['ua_family_icon']);
-                        rua['ua_family_icon_big'] && dotProp.set(ruaJson, 'ua.family.iconBig', rua['ua_family_icon_big']);
+                        rua['ua_uptodate_current_version'] && dotProp.setProperty(ruaJson, 'ua.uptodateCurrentVersion', rua['ua_uptodate_current_version']);
+                        rua['ua_family'] && dotProp.setProperty(ruaJson, 'ua.family.name', rua['ua_family']);
+                        rua['ua_family_code'] && dotProp.setProperty(ruaJson, 'ua.family.code', rua['ua_family_code']);
+                        rua['ua_family_homepage'] && dotProp.setProperty(ruaJson, 'ua.family.homepage', rua['ua_family_homepage']);
+                        rua['ua_family_vendor'] && dotProp.setProperty(ruaJson, 'ua.family.vendor.name', rua['ua_family_vendor']);
+                        rua['ua_family_vendor_code'] && dotProp.setProperty(ruaJson, 'ua.family.vendor.code', rua['ua_family_vendor_code']);
+                        rua['ua_family_vendor_homepage'] && dotProp.setProperty(ruaJson, 'ua.family.vendor.homepage', rua['ua_family_vendor_homepage']);
+                        rua['ua_family_icon'] && dotProp.setProperty(ruaJson, 'ua.family.icon', rua['ua_family_icon']);
+                        rua['ua_family_icon_big'] && dotProp.setProperty(ruaJson, 'ua.family.iconBig', rua['ua_family_icon_big']);
                         if (r['name']) {
-                            dotProp.set(ruaJson, 'ua.family.infoUrl', rua['ua_family_info_url']);
+                            dotProp.setProperty(ruaJson, 'ua.family.infoUrl', rua['ua_family_info_url']);
                         }
                     } else {
-                        rua['ua_family_code'] && dotProp.set(ruaJson, 'ua.family', rua['ua_family_code']);
+                        rua['ua_family_code'] && dotProp.setProperty(ruaJson, 'ua.family', rua['ua_family_code']);
                     }
-                    rua['ua_engine'] && dotProp.set(ruaJson, 'ua.engine', rua['ua_engine']);
+                    rua['ua_engine'] && dotProp.setProperty(ruaJson, 'ua.engine', rua['ua_engine']);
 
                     break;
                 }
@@ -422,20 +422,20 @@ class UdgerParser {
                 rua['os_family_vendor_homepage'] = r['vendor_homepage'] || '';
 
                 if (opts.full) {
-                    rua['os'] && dotProp.set(ruaJson, 'os.name', rua['os']);
-                    rua['os_code'] && dotProp.set(ruaJson, 'os.code', rua['os_code']);
-                    rua['os_homepage'] && dotProp.set(ruaJson, 'os.homepage', rua['os_homepage']);
-                    rua['os_icon'] && dotProp.set(ruaJson, 'os.icon', rua['os_icon']);
-                    rua['os_icon_big'] && dotProp.set(ruaJson, 'os.iconBig', rua['os_icon_big']);
-                    rua['os_info_url'] && dotProp.set(ruaJson, 'os.infoUrl', rua['os_info_url']);
-                    rua['os_family'] && dotProp.set(ruaJson, 'os.family.name', rua['os_family']);
-                    rua['os_family_code'] && dotProp.set(ruaJson, 'os.family.code', rua['os_family_code']);
-                    rua['os_family_vendor'] && dotProp.set(ruaJson, 'os.family.vendor.name', rua['os_family_vendor']);
-                    rua['os_family_vendor_code'] && dotProp.set(ruaJson, 'os.family.vendor.code', rua['os_family_vendor_code']);
-                    rua['os_family_vendor_homepage'] && dotProp.set(ruaJson, 'os.family.vendor.homepage', rua['os_family_vendor_homepage']);
+                    rua['os'] && dotProp.setProperty(ruaJson, 'os.name', rua['os']);
+                    rua['os_code'] && dotProp.setProperty(ruaJson, 'os.code', rua['os_code']);
+                    rua['os_homepage'] && dotProp.setProperty(ruaJson, 'os.homepage', rua['os_homepage']);
+                    rua['os_icon'] && dotProp.setProperty(ruaJson, 'os.icon', rua['os_icon']);
+                    rua['os_icon_big'] && dotProp.setProperty(ruaJson, 'os.iconBig', rua['os_icon_big']);
+                    rua['os_info_url'] && dotProp.setProperty(ruaJson, 'os.infoUrl', rua['os_info_url']);
+                    rua['os_family'] && dotProp.setProperty(ruaJson, 'os.family.name', rua['os_family']);
+                    rua['os_family_code'] && dotProp.setProperty(ruaJson, 'os.family.code', rua['os_family_code']);
+                    rua['os_family_vendor'] && dotProp.setProperty(ruaJson, 'os.family.vendor.name', rua['os_family_vendor']);
+                    rua['os_family_vendor_code'] && dotProp.setProperty(ruaJson, 'os.family.vendor.code', rua['os_family_vendor_code']);
+                    rua['os_family_vendor_homepage'] && dotProp.setProperty(ruaJson, 'os.family.vendor.homepage', rua['os_family_vendor_homepage']);
                 } else {
-                    rua['os_code'] && dotProp.set(ruaJson, 'os.code', rua['os_code']);
-                    rua['os_family_code'] && dotProp.set(ruaJson, 'os.family', rua['os_family_code']);
+                    rua['os_code'] && dotProp.setProperty(ruaJson, 'os.code', rua['os_code']);
+                    rua['os_family_code'] && dotProp.setProperty(ruaJson, 'os.family', rua['os_family_code']);
                 }
                 break;
             }
@@ -473,17 +473,17 @@ class UdgerParser {
                 rua['os_family_vendor_code'] = r['vendor_code'] || '';
                 rua['os_family_vendor_homepage'] = r['vendor_homepage'] || '';
 
-                rua['os'] && dotProp.set(ruaJson, 'os.name', rua['os']);
-                rua['os_code'] && dotProp.set(ruaJson, 'os.code', rua['os_code']);
-                rua['os_homepage'] && dotProp.set(ruaJson, 'os.homepage', rua['os_homepage']);
-                rua['os_icon'] && dotProp.set(ruaJson, 'os.icon', rua['os_icon']);
-                rua['os_icon_big'] && dotProp.set(ruaJson, 'os.iconBig', rua['os_icon_big']);
-                rua['os_info_url'] && dotProp.set(ruaJson, 'os.infoUrl', rua['os_info_url']);
-                rua['os_family'] && dotProp.set(ruaJson, 'os.family.name', rua['os_family']);
-                rua['os_family_code'] && dotProp.set(ruaJson, 'os.family.code', rua['os_family_code']);
-                rua['os_family_vendor'] && dotProp.set(ruaJson, 'os.family.vendor.name', rua['os_family_vendor']);
-                rua['os_family_vendor_code'] && dotProp.set(ruaJson, 'os.family.vendor.code', rua['os_family_vendor_code']);
-                rua['os_family_vendor_homepage'] && dotProp.set(ruaJson, 'os.family.vendor.homepage', rua['os_family_vendor_homepage']);
+                rua['os'] && dotProp.setProperty(ruaJson, 'os.name', rua['os']);
+                rua['os_code'] && dotProp.setProperty(ruaJson, 'os.code', rua['os_code']);
+                rua['os_homepage'] && dotProp.setProperty(ruaJson, 'os.homepage', rua['os_homepage']);
+                rua['os_icon'] && dotProp.setProperty(ruaJson, 'os.icon', rua['os_icon']);
+                rua['os_icon_big'] && dotProp.setProperty(ruaJson, 'os.iconBig', rua['os_icon_big']);
+                rua['os_info_url'] && dotProp.setProperty(ruaJson, 'os.infoUrl', rua['os_info_url']);
+                rua['os_family'] && dotProp.setProperty(ruaJson, 'os.family.name', rua['os_family']);
+                rua['os_family_code'] && dotProp.setProperty(ruaJson, 'os.family.code', rua['os_family_code']);
+                rua['os_family_vendor'] && dotProp.setProperty(ruaJson, 'os.family.vendor.name', rua['os_family_vendor']);
+                rua['os_family_vendor_code'] && dotProp.setProperty(ruaJson, 'os.family.vendor.code', rua['os_family_vendor_code']);
+                rua['os_family_vendor_homepage'] && dotProp.setProperty(ruaJson, 'os.family.vendor.homepage', rua['os_family_vendor_homepage']);
 
             }
         }
@@ -513,13 +513,13 @@ class UdgerParser {
                 rua['device_class_info_url'] = 'https://udger.com/resources/ua-list/device-detail?device=' + r['name'];
 
                 if (opts.full) {
-                    rua['device_class'] && dotProp.set(ruaJson, 'device.class.name', rua['device_class']);
-                    rua['device_class_code'] && dotProp.set(ruaJson, 'device.class.code', rua['device_class_code']);
-                    rua['device_class_icon'] && dotProp.set(ruaJson, 'device.class.icon', rua['device_class_icon']);
-                    rua['device_class_icon_big'] && dotProp.set(ruaJson, 'device.class.iconBig', rua['device_class_icon_big']);
-                    rua['device_class_info_url'] && dotProp.set(ruaJson, 'device.class.infoUrl', rua['device_class_info_url']);
+                    rua['device_class'] && dotProp.setProperty(ruaJson, 'device.class.name', rua['device_class']);
+                    rua['device_class_code'] && dotProp.setProperty(ruaJson, 'device.class.code', rua['device_class_code']);
+                    rua['device_class_icon'] && dotProp.setProperty(ruaJson, 'device.class.icon', rua['device_class_icon']);
+                    rua['device_class_icon_big'] && dotProp.setProperty(ruaJson, 'device.class.iconBig', rua['device_class_icon_big']);
+                    rua['device_class_info_url'] && dotProp.setProperty(ruaJson, 'device.class.infoUrl', rua['device_class_info_url']);
                 } else {
-                    rua['device_class_code'] && dotProp.set(ruaJson, 'device.class', rua['device_class_code']);
+                    rua['device_class_code'] && dotProp.setProperty(ruaJson, 'device.class', rua['device_class_code']);
                 }
 
                 break;
@@ -548,13 +548,13 @@ class UdgerParser {
                 rua['device_class_info_url'] = 'https://udger.com/resources/ua-list/device-detail?device=' + (r['name'] || '');
 
                 if (opts.full) {
-                    rua['device_class'] && dotProp.set(ruaJson, 'device.class.name', rua['device_class']);
-                    rua['device_class_code'] && dotProp.set(ruaJson, 'device.class.code', rua['device_class_code']);
-                    rua['device_class_icon'] && dotProp.set(ruaJson, 'device.class.icon', rua['device_class_icon']);
-                    rua['device_class_icon_big'] && dotProp.set(ruaJson, 'device.class.iconBig', rua['device_class_icon_big']);
-                    rua['device_class_info_url'] && dotProp.set(ruaJson, 'device.class.infoUrl', rua['device_class_info_url']);
+                    rua['device_class'] && dotProp.setProperty(ruaJson, 'device.class.name', rua['device_class']);
+                    rua['device_class_code'] && dotProp.setProperty(ruaJson, 'device.class.code', rua['device_class_code']);
+                    rua['device_class_icon'] && dotProp.setProperty(ruaJson, 'device.class.icon', rua['device_class_icon']);
+                    rua['device_class_icon_big'] && dotProp.setProperty(ruaJson, 'device.class.iconBig', rua['device_class_icon_big']);
+                    rua['device_class_info_url'] && dotProp.setProperty(ruaJson, 'device.class.infoUrl', rua['device_class_info_url']);
                 } else {
-                    rua['device_class_code'] && dotProp.set(ruaJson, 'device.class', rua['device_class_code']);
+                    rua['device_class_code'] && dotProp.setProperty(ruaJson, 'device.class', rua['device_class_code']);
                 }
             }
         }
@@ -611,13 +611,13 @@ class UdgerParser {
                 rua['device_brand_icon_big'] = rC['icon_big'] || '';
                 rua['device_brand_info_url'] = 'https://udger.com/resources/ua-list/devices-brand-detail?brand=' + (rC['brand_code'] || '');
 
-                rua['device_marketname'] && dotProp.set(ruaJson, 'device.marketName', rua['device_marketname']);
-                rua['device_brand'] && dotProp.set(ruaJson, 'device.brand.name', rua['device_brand']);
-                rua['device_brand_code'] && dotProp.set(ruaJson, 'device.brand.code', rua['device_brand_code']);
-                rua['device_brand_homepage'] && dotProp.set(ruaJson, 'device.brand.homepage', rua['device_brand_homepage']);
-                rua['device_brand_icon'] && dotProp.set(ruaJson, 'device.brand.icon', rua['device_brand_icon']);
-                rua['device_brand_icon_big'] && dotProp.set(ruaJson, 'device.brand.iconBig', rua['device_brand_icon_big']);
-                rua['device_brand_info_url'] && dotProp.set(ruaJson, 'device.brand.infoUrl', rua['device_brand_info_url']);
+                rua['device_marketname'] && dotProp.setProperty(ruaJson, 'device.marketName', rua['device_marketname']);
+                rua['device_brand'] && dotProp.setProperty(ruaJson, 'device.brand.name', rua['device_brand']);
+                rua['device_brand_code'] && dotProp.setProperty(ruaJson, 'device.brand.code', rua['device_brand_code']);
+                rua['device_brand_homepage'] && dotProp.setProperty(ruaJson, 'device.brand.homepage', rua['device_brand_homepage']);
+                rua['device_brand_icon'] && dotProp.setProperty(ruaJson, 'device.brand.icon', rua['device_brand_icon']);
+                rua['device_brand_icon_big'] && dotProp.setProperty(ruaJson, 'device.brand.iconBig', rua['device_brand_icon_big']);
+                rua['device_brand_info_url'] && dotProp.setProperty(ruaJson, 'device.brand.infoUrl', rua['device_brand_info_url']);
 
             }
         }
@@ -653,7 +653,7 @@ class UdgerParser {
         debug('parse IP address: START (IP: ' + ip + ')');
 
         rip['ip'] = ip;
-        dotProp.set(ripJson, 'ip', ip);
+        dotProp.setProperty(ripJson, 'ip', ip);
 
         const ipver = utils.getIpVersion(ip);
 
@@ -666,7 +666,7 @@ class UdgerParser {
 
         rip['ip_ver'] = ipver;
         if (opts.full) {
-            dotProp.set(ripJson, 'version', ipver);
+            dotProp.setProperty(ripJson, 'version', ipver);
         }
 
         q = this.db.prepare(
@@ -714,40 +714,40 @@ class UdgerParser {
 
             // JSON FORMAT
             if (opts.full) {
-                rip['ip_classification'] && dotProp.set(ripJson, 'classification.name', rip['ip_classification']);
-                rip['ip_classification_code'] && dotProp.set(ripJson, 'classification.code', rip['ip_classification_code']);
+                rip['ip_classification'] && dotProp.setProperty(ripJson, 'classification.name', rip['ip_classification']);
+                rip['ip_classification_code'] && dotProp.setProperty(ripJson, 'classification.code', rip['ip_classification_code']);
             } else {
-                rip['ip_classification_code'] && dotProp.set(ripJson, 'classification', rip['ip_classification_code']);
+                rip['ip_classification_code'] && dotProp.setProperty(ripJson, 'classification', rip['ip_classification_code']);
             }
 
-            rip['ip_last_seen'] && dotProp.set(ripJson, 'lastSeen', rip['ip_last_seen']);
-            rip['ip_hostname'] && dotProp.set(ripJson, 'hostname', rip['ip_hostname']);
-            rip['ip_country'] && dotProp.set(ripJson, 'geo.country.name', rip['ip_country']);
-            rip['ip_country_code'] && dotProp.set(ripJson, 'geo.country.code', rip['ip_country_code']);
-            rip['ip_city'] && dotProp.set(ripJson, 'geo.city', rip['ip_city']);
+            rip['ip_last_seen'] && dotProp.setProperty(ripJson, 'lastSeen', rip['ip_last_seen']);
+            rip['ip_hostname'] && dotProp.setProperty(ripJson, 'hostname', rip['ip_hostname']);
+            rip['ip_country'] && dotProp.setProperty(ripJson, 'geo.country.name', rip['ip_country']);
+            rip['ip_country_code'] && dotProp.setProperty(ripJson, 'geo.country.code', rip['ip_country_code']);
+            rip['ip_city'] && dotProp.setProperty(ripJson, 'geo.city', rip['ip_city']);
 
-            rip['crawler_name'] && dotProp.set(ripJson, 'crawler.name', rip['crawler_name']);
+            rip['crawler_name'] && dotProp.setProperty(ripJson, 'crawler.name', rip['crawler_name']);
             if (opts.full) {
-                rip['crawler_ver'] && dotProp.set(ripJson, 'crawler.version.current', rip['crawler_ver']);
-                rip['crawler_ver_major'] && dotProp.set(ripJson, 'crawler.version.major', rip['crawler_ver_major']);
-                rip['crawler_family'] && dotProp.set(ripJson, 'crawler.family.name', rip['crawler_family']);
-                rip['crawler_family_code'] && dotProp.set(ripJson, 'crawler.family.code', rip['crawler_family_code']);
-                rip['crawler_family_homepage'] && dotProp.set(ripJson, 'crawler.family.homepage', rip['crawler_family_homepage']);
-                rip['crawler_family_vendor'] && dotProp.set(ripJson, 'crawler.family.vendor.name', rip['crawler_family_vendor']);
-                rip['crawler_family_vendor_code'] && dotProp.set(ripJson, 'crawler.family.vendor.code', rip['crawler_family_vendor_code']);
-                rip['crawler_family_vendor_homepage'] && dotProp.set(ripJson, 'crawler.family.vendor.homepage', rip['crawler_family_vendor_homepage']);
-                rip['crawler_family_icon'] && dotProp.set(ripJson, 'crawler.family.icon', rip['crawler_family_icon']);
+                rip['crawler_ver'] && dotProp.setProperty(ripJson, 'crawler.version.current', rip['crawler_ver']);
+                rip['crawler_ver_major'] && dotProp.setProperty(ripJson, 'crawler.version.major', rip['crawler_ver_major']);
+                rip['crawler_family'] && dotProp.setProperty(ripJson, 'crawler.family.name', rip['crawler_family']);
+                rip['crawler_family_code'] && dotProp.setProperty(ripJson, 'crawler.family.code', rip['crawler_family_code']);
+                rip['crawler_family_homepage'] && dotProp.setProperty(ripJson, 'crawler.family.homepage', rip['crawler_family_homepage']);
+                rip['crawler_family_vendor'] && dotProp.setProperty(ripJson, 'crawler.family.vendor.name', rip['crawler_family_vendor']);
+                rip['crawler_family_vendor_code'] && dotProp.setProperty(ripJson, 'crawler.family.vendor.code', rip['crawler_family_vendor_code']);
+                rip['crawler_family_vendor_homepage'] && dotProp.setProperty(ripJson, 'crawler.family.vendor.homepage', rip['crawler_family_vendor_homepage']);
+                rip['crawler_family_icon'] && dotProp.setProperty(ripJson, 'crawler.family.icon', rip['crawler_family_icon']);
                 if (r['ip_classification_code'] === 'crawler') {
-                    rip['crawler_family_info_url'] && dotProp.set(ripJson, 'crawler.family.infoUrl', rip['crawler_family_info_url']);
+                    rip['crawler_family_info_url'] && dotProp.setProperty(ripJson, 'crawler.family.infoUrl', rip['crawler_family_info_url']);
                 }
-                rip['crawler_last_seen'] && dotProp.set(ripJson, 'crawler.lastSeen', rip['crawler_last_seen']);
-                rip['crawler_category'] && dotProp.set(ripJson, 'crawler.category.name', rip['crawler_category']);
-                rip['crawler_category_code'] && dotProp.set(ripJson, 'crawler.category.code', rip['crawler_category_code']);
-                rip['crawler_respect_robotstxt'] && dotProp.set(ripJson, 'crawler.respectRobotsTxt', rip['crawler_category_code']);
+                rip['crawler_last_seen'] && dotProp.setProperty(ripJson, 'crawler.lastSeen', rip['crawler_last_seen']);
+                rip['crawler_category'] && dotProp.setProperty(ripJson, 'crawler.category.name', rip['crawler_category']);
+                rip['crawler_category_code'] && dotProp.setProperty(ripJson, 'crawler.category.code', rip['crawler_category_code']);
+                rip['crawler_respect_robotstxt'] && dotProp.setProperty(ripJson, 'crawler.respectRobotsTxt', rip['crawler_category_code']);
             } else {
-                rip['crawler_family_code'] && dotProp.set(ripJson, 'crawler.family', rip['crawler_family_code']);
-                rip['crawler_category_code'] && dotProp.set(ripJson, 'crawler.category', rip['crawler_category_code']);
-                rip['crawler_last_seen'] && dotProp.set(ripJson, 'crawler.lastSeen', rip['crawler_last_seen']);
+                rip['crawler_family_code'] && dotProp.setProperty(ripJson, 'crawler.family', rip['crawler_family_code']);
+                rip['crawler_category_code'] && dotProp.setProperty(ripJson, 'crawler.category', rip['crawler_category_code']);
+                rip['crawler_last_seen'] && dotProp.setProperty(ripJson, 'crawler.lastSeen', rip['crawler_last_seen']);
             }
 
         } else {
@@ -756,10 +756,10 @@ class UdgerParser {
             rip['ip_classification_code'] = 'unrecognized';
 
             if (opts.full) {
-                dotProp.set(ripJson, 'classification.name', rip['ip_classification']);
-                dotProp.set(ripJson, 'classification.code', rip['ip_classification_code']);
+                dotProp.setProperty(ripJson, 'classification.name', rip['ip_classification']);
+                dotProp.setProperty(ripJson, 'classification.code', rip['ip_classification_code']);
             } else {
-                dotProp.set(ripJson, 'classification', rip['ip_classification_code']);
+                dotProp.setProperty(ripJson, 'classification', rip['ip_classification_code']);
             }
         }
 
@@ -783,11 +783,11 @@ class UdgerParser {
                 rip['datacenter_homepage'] = r['homepage'] || '';
 
                 if (opts.full) {
-                    rip['datacenter_name'] && dotProp.set(ripJson, 'datacenter.name', rip['datacenter_name']);
-                    rip['datacenter_name_code'] && dotProp.set(ripJson, 'datacenter.code', rip['datacenter_name_code']);
-                    rip['datacenter_homepage'] && dotProp.set(ripJson, 'datacenter.homepage', rip['datacenter_homepage']);
+                    rip['datacenter_name'] && dotProp.setProperty(ripJson, 'datacenter.name', rip['datacenter_name']);
+                    rip['datacenter_name_code'] && dotProp.setProperty(ripJson, 'datacenter.code', rip['datacenter_name_code']);
+                    rip['datacenter_homepage'] && dotProp.setProperty(ripJson, 'datacenter.homepage', rip['datacenter_homepage']);
                 } else {
-                    rip['datacenter_name_code'] && dotProp.set(ripJson, 'datacenter', rip['datacenter_name_code']);
+                    rip['datacenter_name_code'] && dotProp.setProperty(ripJson, 'datacenter', rip['datacenter_name_code']);
                 }
 
             }
@@ -825,11 +825,11 @@ class UdgerParser {
                 rip['datacenter_homepage'] = r['homepage'] || '';
 
                 if (opts.full) {
-                    rip['datacenter_name'] && dotProp.set(ripJson, 'datacenter.name', rip['datacenter_name']);
-                    rip['datacenter_name_code'] && dotProp.set(ripJson, 'datacenter.code', rip['datacenter_name_code']);
-                    rip['datacenter_homepage'] && dotProp.set(ripJson, 'datacenter.homepage', rip['datacenter_homepage']);
+                    rip['datacenter_name'] && dotProp.setProperty(ripJson, 'datacenter.name', rip['datacenter_name']);
+                    rip['datacenter_name_code'] && dotProp.setProperty(ripJson, 'datacenter.code', rip['datacenter_name_code']);
+                    rip['datacenter_homepage'] && dotProp.setProperty(ripJson, 'datacenter.homepage', rip['datacenter_homepage']);
                 } else {
-                    rip['datacenter_name_code'] && dotProp.set(ripJson, 'datacenter', rip['datacenter_name_code']);
+                    rip['datacenter_name_code'] && dotProp.setProperty(ripJson, 'datacenter', rip['datacenter_name_code']);
                 }
             }
 
